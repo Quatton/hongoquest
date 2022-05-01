@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "kitchensink",
   "version": "0.0.0",
   "description": "A kitchen-sink LINE bot example",
@@ -10,6 +11,10 @@
   "dependencies": {
     "@line/bot-sdk": "*",
     "express": "^4.17.1",
+    "firebase": "^9.7.0",
     "ngrok": "^3.2.7"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
   }
 }

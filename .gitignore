@@ -6,3 +6,5 @@ dist/
 
 /downloaded/*
 !/downloaded/.gitkeep
+
+.env

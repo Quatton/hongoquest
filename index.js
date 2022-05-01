@@ -1,11 +1,21 @@
 "use strict";
 
-const line = require("@line/bot-sdk");
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
-const cp = require("child_process");
-const ngrok = require("ngrok");
+import line from "@line/bot-sdk";
+import express from "express";
+import fs from "fs";
+import path from "path";
+import cp from "child_process";
+import ngrok from "ngrok";
+
+import dotenv from "dotenv";
+dotenv.config();
+
+import {
+  firebaseApp,
+  database,
+  writeUserData,
+  readUserData,
+} from "./utils/firebase.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -27,9 +37,21 @@ const app = express();
 app.use("/static", express.static("static"));
 app.use("/downloaded", express.static("downloaded"));
 
-app.get("/callback", (req, res) =>
-  res.end(`I'm listening. Please access with POST.`)
-);
+app.get("/callback", (req, res) => {
+  const testDest = "Uc0031535d95ce837f61157a0f2cc3b89";
+
+  const testMessage = {
+    type: "text",
+    text: "Push Message Test",
+  };
+
+  client
+    .pushMessage(testDest, testMessage)
+    .then((res) => {
+      res.json({ message: testMessage });
+    })
+    .catch((err) => res.json(err));
+});
 
 // webhook callback
 app.post("/callback", line.middleware(config), (req, res) => {
@@ -69,6 +91,7 @@ function handleEvent(event) {
   switch (event.type) {
     case "message":
       const message = event.message;
+
       switch (message.type) {
         case "text":
           return handleText(message, event.replyToken, event.source);
@@ -113,20 +136,48 @@ function handleEvent(event) {
   }
 }
 
-function handleText(message, replyToken, source) {
+async function handleText(message, replyToken, source) {
   const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
 
   switch (message.text) {
     case "profile":
       if (source.userId) {
-        return client
-          .getProfile(source.userId)
-          .then((profile) =>
-            replyText(replyToken, [
-              `Display name: ${profile.displayName}`,
-              `Status message: ${profile.statusMessage}`,
-            ])
-          );
+        const profile = await client.getProfile(source.userId);
+        return await replyText(replyToken, [
+          `Display name: ${profile.displayName}`,
+          `Status message: ${profile.statusMessage}`,
+        ]);
+      } else {
+        return replyText(
+          replyToken,
+          "Bot can't use profile API without user ID"
+        );
+      }
+    case "add to database":
+      if (source.userId) {
+        const profile = await client.getProfile(source.userId);
+        writeUserData(source.userId, {
+          name: profile.displayName,
+          message: profile.statusMessage || "(No message)",
+        });
+      } else {
+        return replyText(
+          replyToken,
+          "Bot can't use profile API without user ID"
+        );
+      }
+    case "my database":
+      if (source.userId) {
+        try {
+          const res = await readUserData(source.userId);
+          const { name, message } = res.data;
+          return await replyText(replyToken, [
+            `Display name: ${name}`,
+            `Status message: ${message}`,
+          ]);
+        } catch (e) {
+          return await replyText(replyToken, [`${e}`]);
+        }
       } else {
         return replyText(
           replyToken,
@@ -325,16 +376,14 @@ function handleText(message, replyToken, source) {
         case "user":
           return replyText(replyToken, "Bot can't leave from 1:1 chat");
         case "group":
-          return replyText(replyToken, "Leaving group").then(() =>
-            client.leaveGroup(source.groupId)
-          );
+          await replyText(replyToken, "Leaving group");
+          return await client.leaveGroup(source.groupId);
         case "room":
-          return replyText(replyToken, "Leaving room").then(() =>
-            client.leaveRoom(source.roomId)
-          );
+          await replyText(replyToken, "Leaving room");
+          return await client.leaveRoom(source.roomId);
       }
     default:
-      console.log(`Echo message to ${replyToken}: ${message.text}`);
+      console.log(`Echo message to ${source.userId}: ${message.text}`);
       return replyText(replyToken, message.text);
   }
 }
