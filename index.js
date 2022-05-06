@@ -11,11 +11,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import {
-  firebaseApp,
-  database,
   writeUserData,
-  readUserData,
-} from "./utils/firebase.js";
+  getUserData,
+  getUserCurrentGame,
+  proceedNextStage,
+  newGameData,
+  removeUserData,
+  endGame,
+} from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -32,6 +35,14 @@ const client = new line.Client(config);
 // create Express app
 // about Express itself: https://expressjs.com/
 const app = express();
+
+// questions related imports
+const rawData = fs.readFileSync("./static/questions.json");
+const { questions } = JSON.parse(rawData);
+
+const { flex_messages } = JSON.parse(
+  fs.readFileSync("./static/flex_messages.json")
+);
 
 // serve static and downloaded files
 app.use("/static", express.static("static"));
@@ -82,6 +93,27 @@ const replyText = (token, texts) => {
   );
 };
 
+const sendQuestion = (token, stage) => {
+  const question = questions[stage];
+  const texts = Array.isArray(question.question)
+    ? question.question
+    : [question.question];
+  const message = texts.map((text) => ({ type: "text", text }));
+  if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
+  if (question.picture) {
+    const picUrl = `${baseURL}/static/question_img/${question.picture}`;
+    const original = `${picUrl}.jpg`;
+    const preview = `${picUrl}-preview.jpg`;
+    message.push({
+      type: "image",
+      originalContentUrl: original,
+      previewImageUrl: preview,
+    });
+  }
+
+  return client.replyMessage(token, message);
+};
+
 // callback function to handle a single event
 function handleEvent(event) {
   if (event.replyToken && event.replyToken.match(/^(.)\1*$/)) {
@@ -110,9 +142,34 @@ function handleEvent(event) {
       }
 
     case "follow":
-      return replyText(event.replyToken, "Got followed event");
+      // Generate database
+      getUserData(event.source.userId).catch((err) => {
+        client.getProfile(event.source.userId).then((profile) => {
+          writeUserData(event.source.userId, {
+            name: profile.displayName,
+          });
+        });
+      });
+
+      return client.replyMessage(event.replyToken, {
+        type: "template",
+        altText: "Game start",
+        template: {
+          type: "confirm",
+          text: "Start Game?",
+          actions: [
+            { label: "ゲーム開始", type: "message", text: "ゲーム開始" },
+            {
+              label: "詳しく教えてください",
+              type: "message",
+              text: "詳しく教えてください",
+            },
+          ],
+        },
+      });
 
     case "unfollow":
+      removeUserData(event.source.userId);
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
     case "join":
@@ -139,7 +196,63 @@ function handleEvent(event) {
 async function handleText(message, replyToken, source) {
   const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
 
+  // userId が必要。常時は問題ないはず。
+  if (!source.userId) return replyText(replyToken, "ユーザーIDが必要");
+
+  // load the database
+  const userData = await getUserData(source.userId);
+  const { data } = userData;
+
+  if (!data.current_game) {
+    // データベースの存在を確認する
+
+    // でなければ「ゲーム開始」だけ対応
+    switch (message.text) {
+      case "ゲーム開始":
+        if (source.userId) {
+          const profile = await client.getProfile(source.userId);
+
+          // データベースが既にあるか
+          await newGameData(source.userId);
+
+          return client.replyMessage(replyToken, {
+            type: "template",
+            altText: "Game start confirmation",
+            template: {
+              type: "confirm",
+              text: "Are you ready?",
+              actions: [
+                { label: "Yes", type: "message", text: "Yes!" },
+                { label: "No", type: "message", text: "No!" },
+              ],
+            },
+          });
+        }
+      case "詳しく教えてください。":
+        return replyText(replyToken, [
+          `(必要であれば、プレーヤーにゲームを説明してあげて)`,
+        ]);
+
+      default:
+        return replyText(replyToken, [
+          `(tell them to say whether "ゲーム開始" or if you're not sure about the game ask 詳しく教えてください。)`,
+        ]);
+    }
+  }
+
+  const { data: gameData } = await getUserCurrentGame(source.userId);
+  const stage = gameData.stage;
+  const questionData = questions[stage];
+
   switch (message.text) {
+    case "ゲーム開始":
+      return replyText(replyToken, [`bro you're in a game rn`]);
+
+    case "詳しく教えてください。":
+      return replyText(replyToken, [
+        `(必要であれば、プレーヤーにゲームを説明してあげて)`,
+      ]);
+
     case "profile":
       if (source.userId) {
         const profile = await client.getProfile(source.userId);
@@ -169,7 +282,7 @@ async function handleText(message, replyToken, source) {
     case "my database":
       if (source.userId) {
         try {
-          const res = await readUserData(source.userId);
+          const res = await getUserData(source.userId);
           const { name, message } = res.data;
           return await replyText(replyToken, [
             `Display name: ${name}`,
@@ -184,6 +297,7 @@ async function handleText(message, replyToken, source) {
           "Bot can't use profile API without user ID"
         );
       }
+
     case "buttons":
       return client.replyMessage(replyToken, {
         type: "template",
@@ -382,9 +496,34 @@ async function handleText(message, replyToken, source) {
           await replyText(replyToken, "Leaving room");
           return await client.leaveRoom(source.roomId);
       }
+    case "再送":
+      return await sendQuestion(replyToken, stage);
     default:
-      console.log(`Echo message to ${source.userId}: ${message.text}`);
-      return replyText(replyToken, message.text);
+      if (message.text === questionData.answer) {
+        //proceed to the next stage
+        const res = await proceedNextStage(source.userId);
+
+        if (res) {
+          if (stage === questions.length - 1) {
+            endGame(source.userId).then((time) => {
+              client.getProfile(source.userId).then((profile) => {
+                return replyText(
+                  replyToken,
+                  `Congratulations, ${profile.displayName}! You completed every stage in ${time}`
+                );
+              });
+            });
+          } else {
+            return await sendQuestion(replyToken, stage + 1);
+          }
+        }
+      } else {
+        if (!stage) {
+          return await replyText(replyToken, "Please just press Yes!");
+        } else {
+          return await replyText(replyToken, "Wrong answers");
+        }
+      }
   }
 }
 

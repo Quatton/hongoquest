@@ -1,0 +1,32 @@
+{
+  "questions": [
+    {
+      "id": 0,
+      "picture": false,
+      "question": "Are you ready?",
+      "answer": "Yes!",
+      "hint": "Just say yes."
+    },
+    {
+      "id": 1,
+      "question": "1 + 1 = ?",
+      "picture": false,
+      "answer": "2",
+      "hint": "Why would you need a hint?"
+    },
+    {
+      "id": 2,
+      "question": "2 + 2 = ?",
+      "picture": false,
+      "answer": "4",
+      "hint": "You wouldn't need a hint."
+    },
+    {
+      "id": 3,
+      "question": "How to solve world hunger?",
+      "picture": false,
+      "answer": "food",
+      "hint": "What do hungry people need?"
+    }
+  ]
+}
