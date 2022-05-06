@@ -12,9 +12,7 @@
     "@line/bot-sdk": "*",
     "express": "^4.17.1",
     "firebase": "^9.7.0",
-    "ngrok": "^3.2.7"
-  },
-  "devDependencies": {
+    "ngrok": "^3.2.7",
     "dotenv": "^16.0.0"
   }
 }
