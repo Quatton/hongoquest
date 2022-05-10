@@ -151,6 +151,80 @@
         ],
         "flex": 0
       }
+    },
+    "congrats": {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Congratulations! 🥳",
+            "align": "center",
+            "weight": "bold",
+            "color": "#06C755",
+            "size": "xl"
+          }
+        ]
+      },
+      "hero": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "You completed the challenge in",
+            "align": "center"
+          }
+        ]
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "00:00",
+            "size": "4xl",
+            "align": "center",
+            "weight": "bold",
+            "color": "#06C755"
+          },
+          {
+            "type": "text",
+            "text": "Wrong Answers: 0",
+            "margin": "sm"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "View Leaderboard",
+              "text": "leaderboard"
+            },
+            "style": "primary"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "Play Again",
+              "text": "ゲーム開始"
+            },
+            "offsetTop": "none",
+            "offsetStart": "none",
+            "margin": "md",
+            "style": "secondary"
+          }
+        ]
+      }
     }
   }
 }

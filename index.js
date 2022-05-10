@@ -18,6 +18,7 @@ import {
   newGameData,
   removeUserData,
   endGame,
+  updateWrong,
 } from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
@@ -37,23 +38,35 @@ const client = new line.Client(config);
 const app = express();
 
 // questions related imports
-const rawData = fs.readFileSync("./static/questions.json");
-const { questions } = JSON.parse(rawData);
-
-const { flex_messages } = JSON.parse(
-  fs.readFileSync("./static/flex_messages.json")
-);
+import { questions, flex_messages } from "./lib/questions.js";
 
 // serve static and downloaded files
 app.use("/static", express.static("static"));
 app.use("/downloaded", express.static("downloaded"));
 
+function sendFlexMessage(
+  replyToken = "",
+  flex_message,
+  altText = "A flex message"
+) {
+  const testMessage = {
+    type: "flex",
+    altText: altText,
+    contents: flex_message,
+  };
+
+  if (replyToken.length > 0) {
+    return client.replyMessage(replyToken, testMessage);
+  }
+}
+
 app.get("/callback", (req, res) => {
   const testDest = "Uc0031535d95ce837f61157a0f2cc3b89";
 
   const testMessage = {
-    type: "text",
-    text: "Push Message Test",
+    type: "flex",
+    altText: "test message",
+    contents: flex_messages.sample,
   };
 
   client
@@ -220,10 +233,10 @@ async function handleText(message, replyToken, source) {
             altText: "Game start confirmation",
             template: {
               type: "confirm",
-              text: "Are you ready?",
+              text: "Please Pick difficulty",
               actions: [
-                { label: "Yes", type: "message", text: "Yes!" },
-                { label: "No", type: "message", text: "No!" },
+                { label: "Easy", type: "message", text: "easy" },
+                { label: "Hard", type: "message", text: "hard" },
               ],
             },
           });
@@ -240,8 +253,9 @@ async function handleText(message, replyToken, source) {
     }
   }
 
-  const { data: gameData } = await getUserCurrentGame(source.userId);
-  const stage = gameData.stage;
+  const { data: gameData, key } = await getUserCurrentGame(source.userId);
+  const stage = gameData.progress.length - 1;
+
   const questionData = questions[stage];
 
   switch (message.text) {
@@ -253,276 +267,69 @@ async function handleText(message, replyToken, source) {
         `(必要であれば、プレーヤーにゲームを説明してあげて)`,
       ]);
 
-    case "profile":
-      if (source.userId) {
-        const profile = await client.getProfile(source.userId);
-        return await replyText(replyToken, [
-          `Display name: ${profile.displayName}`,
-          `Status message: ${profile.statusMessage}`,
-        ]);
-      } else {
-        return replyText(
-          replyToken,
-          "Bot can't use profile API without user ID"
-        );
-      }
-    case "add to database":
-      if (source.userId) {
-        const profile = await client.getProfile(source.userId);
-        writeUserData(source.userId, {
-          name: profile.displayName,
-          message: profile.statusMessage || "(No message)",
-        });
-      } else {
-        return replyText(
-          replyToken,
-          "Bot can't use profile API without user ID"
-        );
-      }
-    case "my database":
-      if (source.userId) {
-        try {
-          const res = await getUserData(source.userId);
-          const { name, message } = res.data;
-          return await replyText(replyToken, [
-            `Display name: ${name}`,
-            `Status message: ${message}`,
-          ]);
-        } catch (e) {
-          return await replyText(replyToken, [`${e}`]);
-        }
-      } else {
-        return replyText(
-          replyToken,
-          "Bot can't use profile API without user ID"
-        );
-      }
-
-    case "buttons":
-      return client.replyMessage(replyToken, {
-        type: "template",
-        altText: "Buttons alt text",
-        template: {
-          type: "buttons",
-          thumbnailImageUrl: buttonsImageURL,
-          title: "My button sample",
-          text: "Hello, my button",
-          actions: [
-            { label: "Go to line.me", type: "uri", uri: "https://line.me" },
-            { label: "Say hello1", type: "postback", data: "hello こんにちは" },
-            {
-              label: "言 hello2",
-              type: "postback",
-              data: "hello こんにちは",
-              text: "hello こんにちは",
-            },
-            { label: "Say message", type: "message", text: "Rice=米" },
-          ],
-        },
-      });
-    case "confirm":
-      return client.replyMessage(replyToken, {
-        type: "template",
-        altText: "Confirm alt text",
-        template: {
-          type: "confirm",
-          text: "Do it?",
-          actions: [
-            { label: "Yes", type: "message", text: "Yes!" },
-            { label: "No", type: "message", text: "No!" },
-          ],
-        },
-      });
-    case "carousel":
-      return client.replyMessage(replyToken, {
-        type: "template",
-        altText: "Carousel alt text",
-        template: {
-          type: "carousel",
-          columns: [
-            {
-              thumbnailImageUrl: buttonsImageURL,
-              title: "hoge",
-              text: "fuga",
-              actions: [
-                { label: "Go to line.me", type: "uri", uri: "https://line.me" },
-                {
-                  label: "Say hello1",
-                  type: "postback",
-                  data: "hello こんにちは",
-                },
-              ],
-            },
-            {
-              thumbnailImageUrl: buttonsImageURL,
-              title: "hoge",
-              text: "fuga",
-              actions: [
-                {
-                  label: "言 hello2",
-                  type: "postback",
-                  data: "hello こんにちは",
-                  text: "hello こんにちは",
-                },
-                { label: "Say message", type: "message", text: "Rice=米" },
-              ],
-            },
-          ],
-        },
-      });
-    case "image carousel":
-      return client.replyMessage(replyToken, {
-        type: "template",
-        altText: "Image carousel alt text",
-        template: {
-          type: "image_carousel",
-          columns: [
-            {
-              imageUrl: buttonsImageURL,
-              action: {
-                label: "Go to LINE",
-                type: "uri",
-                uri: "https://line.me",
-              },
-            },
-            {
-              imageUrl: buttonsImageURL,
-              action: {
-                label: "Say hello1",
-                type: "postback",
-                data: "hello こんにちは",
-              },
-            },
-            {
-              imageUrl: buttonsImageURL,
-              action: {
-                label: "Say message",
-                type: "message",
-                text: "Rice=米",
-              },
-            },
-            {
-              imageUrl: buttonsImageURL,
-              action: {
-                label: "datetime",
-                type: "datetimepicker",
-                data: "DATETIME",
-                mode: "datetime",
-              },
-            },
-          ],
-        },
-      });
-    case "datetime":
-      return client.replyMessage(replyToken, {
-        type: "template",
-        altText: "Datetime pickers alt text",
-        template: {
-          type: "buttons",
-          text: "Select date / time !",
-          actions: [
-            {
-              type: "datetimepicker",
-              label: "date",
-              data: "DATE",
-              mode: "date",
-            },
-            {
-              type: "datetimepicker",
-              label: "time",
-              data: "TIME",
-              mode: "time",
-            },
-            {
-              type: "datetimepicker",
-              label: "datetime",
-              data: "DATETIME",
-              mode: "datetime",
-            },
-          ],
-        },
-      });
-    case "imagemap":
-      return client.replyMessage(replyToken, {
-        type: "imagemap",
-        baseUrl: `${baseURL}/static/rich`,
-        altText: "Imagemap alt text",
-        baseSize: { width: 1040, height: 1040 },
-        actions: [
-          {
-            area: { x: 0, y: 0, width: 520, height: 520 },
-            type: "uri",
-            linkUri: "https://store.line.me/family/manga/en",
-          },
-          {
-            area: { x: 520, y: 0, width: 520, height: 520 },
-            type: "uri",
-            linkUri: "https://store.line.me/family/music/en",
-          },
-          {
-            area: { x: 0, y: 520, width: 520, height: 520 },
-            type: "uri",
-            linkUri: "https://store.line.me/family/play/en",
-          },
-          {
-            area: { x: 520, y: 520, width: 520, height: 520 },
-            type: "message",
-            text: "URANAI!",
-          },
-        ],
-        video: {
-          originalContentUrl: `${baseURL}/static/imagemap/video.mp4`,
-          previewImageUrl: `${baseURL}/static/imagemap/preview.jpg`,
-          area: {
-            x: 280,
-            y: 385,
-            width: 480,
-            height: 270,
-          },
-          externalLink: {
-            linkUri: "https://line.me",
-            label: "LINE",
-          },
-        },
-      });
-    case "bye":
-      switch (source.type) {
-        case "user":
-          return replyText(replyToken, "Bot can't leave from 1:1 chat");
-        case "group":
-          await replyText(replyToken, "Leaving group");
-          return await client.leaveGroup(source.groupId);
-        case "room":
-          await replyText(replyToken, "Leaving room");
-          return await client.leaveRoom(source.roomId);
-      }
     case "再送":
       return await sendQuestion(replyToken, stage);
+
+    case "ヒント":
+      const time_start = gameData.progress.at(-1);
+      const time_diff = Date.now() - time_start;
+      const hints = Array.isArray(questionData.hint)
+        ? questionData.hint
+        : [questionData.hint];
+
+      if (time_diff < 10000) {
+        return replyText(replyToken, [
+          `Please wait another ${Math.ceil(
+            (10000 - time_diff) / 1000
+          )} seconds`,
+        ]);
+      } else {
+        return replyText(replyToken, hints);
+      }
+
     default:
+      if (!stage) {
+        switch (message.text) {
+          case "easy":
+            await proceedNextStage(source.userId);
+            return await sendQuestion(replyToken, stage + 1);
+          case "hard":
+            await proceedNextStage(source.userId);
+            return await sendQuestion(replyToken, stage + 1);
+          case "online":
+            await proceedNextStage(source.userId);
+            return await sendQuestion(replyToken, stage + 1);
+          default:
+            return await replyText(replyToken, "just pick one");
+        }
+      }
+
       if (message.text === questionData.answer) {
         //proceed to the next stage
         const res = await proceedNextStage(source.userId);
 
         if (res) {
           if (stage === questions.length - 1) {
-            endGame(source.userId).then((time) => {
-              client.getProfile(source.userId).then((profile) => {
-                return replyText(
-                  replyToken,
-                  `Congratulations, ${profile.displayName}! You completed every stage in ${time}`
-                );
-              });
+            endGame(source.userId).then((data) => {
+              const { time, wrong } = data;
+              const congrats = flex_messages.congrats;
+              congrats.body.contents[0].text = time;
+              congrats.body.contents[1].text = `Wrong Answers: ${wrong}`;
+              return sendFlexMessage(
+                replyToken,
+                congrats,
+                `Congratulations! You completed the challenge in ${time} with ${wrong} wrong answer${
+                  wrong > 1 ? "s" : ""
+                }`
+              );
             });
           } else {
             return await sendQuestion(replyToken, stage + 1);
           }
         }
       } else {
-        if (!stage) {
-          return await replyText(replyToken, "Please just press Yes!");
-        } else {
-          return await replyText(replyToken, "Wrong answers");
-        }
+        updateWrong(key);
+        return await replyText(replyToken, "Wrong answers");
       }
   }
 }
