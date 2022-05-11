@@ -367,7 +367,7 @@ async function handleText(message, replyToken, source) {
       }
 
     default:
-      if (message.text in questionData.answer) {
+      if (questionData.answer.includes(message.text)) {
         //proceed to the next stagedownloaded
         await proceedNextStage(source.userId);
 
