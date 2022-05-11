@@ -152,6 +152,64 @@
         "flex": 0
       }
     },
+    "game_start": {
+      "type": "bubble",
+      "hero": {
+        "type": "image",
+        "url": "https://via.placeholder.com/240x150.png/06C755/808080",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "action": {
+          "type": "uri",
+          "uri": "http://linecorp.com/"
+        }
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "(ゲームの説明)",
+            "weight": "bold",
+            "size": "xl"
+          },
+          {
+            "type": "text",
+            "text": "this game is a game so please play thank you.",
+            "wrap": true
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "Start",
+              "text": "ゲーム開始"
+            },
+            "style": "primary"
+          },
+          {
+            "type": "button",
+            "style": "secondary",
+            "action": {
+              "type": "message",
+              "text": "詳しく教えてください",
+              "label": "Learn More"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
+      }
+    },
     "congrats": {
       "type": "bubble",
       "header": {

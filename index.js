@@ -168,22 +168,11 @@ function handleEvent(event) {
         });
       });
 
-      return client.replyMessage(event.replyToken, {
-        type: "template",
-        altText: "Game start",
-        template: {
-          type: "confirm",
-          text: "Start Game?",
-          actions: [
-            { label: "ゲーム開始", type: "message", text: "ゲーム開始" },
-            {
-              label: "詳しく教えてください",
-              type: "message",
-              text: "詳しく教えてください",
-            },
-          ],
-        },
-      });
+      return sendFlexMessage(
+        event.replyToken,
+        flex_messages.game_start,
+        "Are you ready to start the game?"
+      );
 
     case "unfollow":
       removeUserData(event.source.userId);
