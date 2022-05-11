@@ -329,9 +329,10 @@ async function handleText(message, replyToken, source) {
   }
 
   const { data: gameData, key } = await getUserCurrentGame(source.userId);
-  const stage = gameData.progress.length - 1;
+  const stage = gameData.progress.length;
+  const mode = gameData.mode;
 
-  const questionData = questions[stage];
+  const questionData = questions[mode][stage];
 
   switch (message.text) {
     case "ゲーム開始":
@@ -365,7 +366,7 @@ async function handleText(message, replyToken, source) {
       }
 
     default:
-      if (message.text === questionData.answer) {
+      if (message.text in questionData.answer) {
         //proceed to the next stagedownloaded
         await proceedNextStage(source.userId);
 

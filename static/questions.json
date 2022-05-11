@@ -12,28 +12,28 @@
         "id": 1,
         "question": "",
         "picture": "hardQ1",
-        "answer": "さんしろういけ、いくとくえんこころじいけ",
+        "answer": ["さんしろういけ", "いくとくえんこころじいけ"],
         "hint": "Why would you need a hint?"
       },
       {
         "id": 2,
         "question": "",
         "picture": "hardQ2",
-        "answer": "けんどうぶ、とうだいけんどうぶ",
+        "answer": ["けんどうぶ", "とうだいけんどうぶ"],
         "hint": "You wouldn't need a hint."
       },
       {
         "id": 3,
         "question": "",
         "picture": "hardQ3",
-        "answer": "おおおとこ",
+        "answer": ["おおおとこ"],
         "hint": "Please don't ask for a hint."
       },
       {
         "id": 4,
         "question": "",
         "picture": "hardQ4",
-        "answer": "1827",
+        "answer": ["1827"],
         "hint": "You still need a hint?"
       }
     ]
