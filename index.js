@@ -125,12 +125,12 @@ const sendQuestion = (token, stage) => {
       `${question.picture}-preview.jpg`
     );
 
-    const originalContentUrl =
-      baseURL + "/static/question_img/" + path.basename(downloadPath);
-    const previewImageUrl =
-      baseURL + "/static/question_img/" + path.basename(previewPath);
-
     if (!fs.existsSync(previewPath)) {
+      const originalContentUrl =
+        baseURL + "/static/question_img/" + path.basename(originalPath);
+      const previewImageUrl =
+        baseURL + "/static/question_img/" + path.basename(previewPath);
+
       cp.execSync(
         `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
       );
