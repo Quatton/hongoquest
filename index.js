@@ -144,11 +144,11 @@ const sendQuestion = (token, stage) => {
       );
     }
 
-    // message.push({
-    //   type: "image",
-    //   originalContentUrl,
-    //   previewImageUrl,
-    // });
+    message.push({
+      type: "image",
+      originalContentUrl,
+      previewImageUrl,
+    });
   }
 
   return client.replyMessage(token, message);
