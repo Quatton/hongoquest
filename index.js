@@ -284,7 +284,7 @@ async function handleText(message, replyToken, source) {
       case 3:
         switch (message.text) {
           case "キャンパス":
-            proceedToMenu(source.userId);
+            proceedToMenu(source.userId, 0);
             return sendFlexMessage(replyToken, flex_messages.difficulty);
           case "オンライン":
             proceedToMenu(source.userId, 0);
