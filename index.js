@@ -156,7 +156,7 @@ const sendQuestion = async (token, userId) => {
 };
 
 // callback function to handle a single event
-function handleEvent(event) {
+async function handleEvent(event) {
   if (event.replyToken && event.replyToken.match(/^(.)\1*$/)) {
     return console.log("Test hook recieved: " + JSON.stringify(event.message));
   }
@@ -217,9 +217,8 @@ function handleEvent(event) {
       }
 
       if (data === "ゲーム開始") {
-        proceedNextStage(event.source.userId).then(() => {
-          return sendQuestion(event.replyToken, event.source.userId);
-        });
+        await proceedNextStage(event.source.userId);
+        return sendQuestion(event.replyToken, event.source.userId);
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
