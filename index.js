@@ -128,16 +128,10 @@ const sendQuestion = (token, stage) => {
       `${question.picture}-preview.jpg`
     );
 
-    const originalContentUrl = path.join(
-      baseURL,
-      "static/question_img",
-      path.basename(originalPath)
-    );
-    const previewImageUrl = path.join(
-      baseURL,
-      "static/question_img/",
-      path.basename(previewPath)
-    );
+    const originalContentUrl =
+      baseURL + "/static/question_img" + path.basename(originalPath);
+    const previewImageUrl =
+      baseURL + "/static/question_img" + path.basename(previewPath);
 
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
@@ -145,13 +139,11 @@ const sendQuestion = (token, stage) => {
       );
     }
 
-    message[0] = {
+    message.push({
       type: "image",
-      originalContentUrl:
-        "https://hongoquest.herokuapp.com/static/question_img/stage1.jpg",
-      previewImageUrl:
-        "https://hongoquest.herokuapp.com/static/question_img/stage1-preview.jpg",
-    };
+      originalContentUrl,
+      previewImageUrl,
+    });
   }
 
   return client.replyMessage(token, message);
@@ -376,16 +368,10 @@ function handleImage(message, replyToken) {
         );
 
         return {
-          originalContentUrl: path.join(
-            baseURL,
-            "/downloaded/",
-            path.basename(downloadPath)
-          ),
-          previewImageUrl: path.join(
-            baseURL,
-            "/downloaded/",
-            path.basename(previewPath)
-          ),
+          originalContentUrl:
+            baseURL + "/downloaded/" + path.basename(downloadPath),
+          previewImageUrl:
+            baseURL + "/downloaded/" + path.basename(previewPath),
         };
       }
     );
