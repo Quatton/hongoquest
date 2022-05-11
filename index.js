@@ -120,7 +120,19 @@ const sendQuestion = (token, stage) => {
     );
     const original = `${picUrl}.jpg`;
     const preview = `${picUrl}-preview.jpg`;
-    cp.execSync(`convert -resize 240x jpeg:${original} jpeg:${preview}`);
+    const originalPath = path.join(
+      path.resolve(),
+      "static/question_img",
+      `${question.picture}.jpg`
+    );
+    const previewPath = path.join(
+      path.resolve(),
+      "static/question_img",
+      `${question.picture}-preview.jpg`
+    );
+    cp.execSync(
+      `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
+    );
     message.push({
       type: "image",
       originalContentUrl: original,
