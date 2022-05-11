@@ -298,11 +298,11 @@ async function handleText(message, replyToken, source) {
       case 4:
         switch (message.text) {
           case "難しい":
-            proceedToMenu(source.userId, 1);
+            proceedToMenu(source.userId, 0);
             newGameData(source.userId, 0);
             return sendFlexMessage(replyToken, flex_messages.start_confirm);
           case "普通":
-            proceedToMenu(source.userId, 1);
+            proceedToMenu(source.userId, 0);
             newGameData(source.userId, 1);
             return sendFlexMessage(replyToken, flex_messages.start_confirm);
           default:
@@ -329,10 +329,11 @@ async function handleText(message, replyToken, source) {
   }
 
   const { data: gameData, key } = await getUserCurrentGame(source.userId);
-  const stage = gameData.progress.length;
+  const stage = gameData.progress.length - 1;
   const mode = gameData.mode;
 
   const questionData = questions[mode][stage];
+  console.log(questionData.answer);
 
   switch (message.text) {
     case "ゲーム開始":
