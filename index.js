@@ -217,8 +217,9 @@ function handleEvent(event) {
       }
 
       if (data === "ゲーム開始") {
-        await proceedNextStage(event.source.userId);
-        return sendQuestion(event.replyToken, event.source.userId);
+        proceedNextStage(event.source.userId).then(() => {
+          return sendQuestion(event.replyToken, event.source.userId);
+        });
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
