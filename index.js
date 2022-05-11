@@ -64,9 +64,11 @@ app.get("/callback", (req, res) => {
   const testDest = "Uc0031535d95ce837f61157a0f2cc3b89";
 
   const testMessage = {
-    type: "flex",
-    altText: "test message",
-    contents: flex_messages.sample,
+    type: "image",
+    originalContentUrl:
+      "https://hongoquest.herokuapp.com/static/question_img/stage1.jpg",
+    previewImageUrl:
+      "https://hongoquest.herokuapp.com/static/question_img/stage1-preview.jpg",
   };
 
   client
@@ -127,25 +129,26 @@ const sendQuestion = (token, stage) => {
 
     const originalContentUrl = path.join(
       baseURL,
-      "/static/question_img/",
+      "static/question_img",
       path.basename(originalPath)
     );
     const previewImageUrl = path.join(
       baseURL,
-      "/static/question_img/",
+      "static/question_img/",
       path.basename(previewPath)
     );
+
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
         `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
       );
     }
 
-    message.push({
-      type: "image",
-      originalContentUrl,
-      previewImageUrl,
-    });
+    // message.push({
+    //   type: "image",
+    //   originalContentUrl,
+    //   previewImageUrl,
+    // });
   }
 
   return client.replyMessage(token, message);
