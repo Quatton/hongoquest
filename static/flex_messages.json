@@ -181,13 +181,13 @@
             "text": "HONGO QUESTは謎を解きながら東大について知ることができる企画となっており、キャンパスとオンラインの両方から参加が可能となっています。",
             "size": "sm",
             "wrap": true,
-            "margin": "md"
+            "margin": "lg"
           },
           {
             "type": "text",
             "text": "後日、クリア時間や正答率に応じたランキング発表なども行う予定ですのでお楽しみに！",
             "wrap": true,
-            "margin": "md",
+            "margin": "lg",
             "size": "sm"
           }
         ]
@@ -304,7 +304,7 @@
             "type": "text",
             "text": "ニックネームは",
             "wrap": true,
-            "size": "sm",
+            "size": "md",
             "margin": "none"
           },
           {
@@ -493,6 +493,49 @@
               "type": "message",
               "text": "オンライン",
               "label": "オンライン"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
+      }
+    },
+    "difficulty": {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "wrap": true,
+            "size": "sm",
+            "margin": "none",
+            "text": "問題の難易度を選択してください。"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "難しい",
+              "text": "難しい"
+            },
+            "style": "secondary"
+          },
+          {
+            "type": "button",
+            "style": "secondary",
+            "action": {
+              "type": "message",
+              "text": "普通",
+              "label": "普通"
             },
             "margin": "md"
           }

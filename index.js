@@ -97,7 +97,7 @@ app.post("/callback", line.middleware(config), (req, res) => {
     .then(() => res.end())
     .catch((err) => {
       console.error(err);
-      console.error(err.response.data);
+      console.error(err.response);
       res.status(500).end();
     });
 });
@@ -111,9 +111,10 @@ const replyText = (token, texts) => {
   );
 };
 
-const sendQuestion = (token, userId) => {
-  const { data } = await getUserCurrentGame(userId);
-  const { stage, mode } = data;
+const sendQuestion = async (token, userId) => {
+  const { data: gameData } = await getUserCurrentGame(userId);
+  const { progress, mode } = gameData;
+  const stage = progress.length;
   const question = questions[mode][stage];
   const texts = Array.isArray(question.question)
     ? question.question
@@ -191,9 +192,11 @@ function handleEvent(event) {
         });
       });
 
+      const game_start = flex_messages.game_start;
+      game_start.hero.url = `${baseURL}/static/logo.png`;
       return sendFlexMessage(
         event.replyToken,
-        flex_messages.game_start,
+        game_start,
         "Are you ready to start the game?"
       );
 
@@ -215,7 +218,7 @@ function handleEvent(event) {
 
       if (data === "ゲーム開始") {
         proceedNextStage(event.source.userId);
-        return sendQuestion(event.replyToken, userId);
+        return sendQuestion(event.replyToken, event.source.userId);
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
@@ -255,10 +258,11 @@ async function handleText(message, replyToken, source) {
         }
       case 1:
         const nickname_confirm = flex_messages.nickname;
-        nickname_confirm.body.contents[1].text = message.text;
+        const name = message.text.slice(0, 32);
+        nickname_confirm.body.contents[1].text = name;
         proceedToMenu(source.userId);
         updateUserData(source.userId, {
-          name: message.text,
+          name: name,
         });
         return sendFlexMessage(replyToken, nickname_confirm);
       case 2:
@@ -268,12 +272,12 @@ async function handleText(message, replyToken, source) {
             return sendFlexMessage(replyToken, flex_messages.place);
           case "入力し直す":
             proceedToMenu(source.userId, 1);
-            return replyMessage(replyToken, [
+            return replyText(replyToken, [
               "まずはじめに、あなたのニックネームを送信してください。",
               "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
             ]);
           default:
-            return replyMessage(replyToken, [
+            return replyText(replyToken, [
               "【はい】か【入力し直す】をお選びください。",
             ]);
         }
@@ -281,15 +285,13 @@ async function handleText(message, replyToken, source) {
         switch (message.text) {
           case "キャンパス":
             proceedToMenu(source.userId);
-            return replyMessage(replyToken, [
-              "問題の難易度を選択してください。",
-            ]);
+            return sendFlexMessage(replyToken, flex_messages.difficulty);
           case "オンライン":
             proceedToMenu(source.userId, 0);
             newGameData(source.userId, 2);
             return sendFlexMessage(replyToken, flex_messages.start_confirm);
           default:
-            return replyMessage(replyToken, [
+            return replyText(replyToken, [
               "【キャンパス】か【オンライン】をお選びください。",
             ]);
         }
@@ -304,7 +306,7 @@ async function handleText(message, replyToken, source) {
             newGameData(source.userId, 1);
             return sendFlexMessage(replyToken, flex_messages.start_confirm);
           default:
-            return replyMessage(replyToken, [
+            return replyText(replyToken, [
               "【難しい】か【普通】をお選びください。",
             ]);
         }
