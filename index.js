@@ -147,8 +147,10 @@ const sendQuestion = (token, stage) => {
 
     message[0] = {
       type: "image",
-      originalContentUrl,
-      previewImageUrl,
+      originalContentUrl:
+        "https://hongoquest.herokuapp.com/static/question_img/stage1.jpg",
+      previewImageUrl:
+        "https://hongoquest.herokuapp.com/static/question_img/stage1-preview.jpg",
     };
   }
 
