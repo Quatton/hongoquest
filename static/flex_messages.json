@@ -156,7 +156,7 @@
       "type": "bubble",
       "hero": {
         "type": "image",
-        "url": "https://via.placeholder.com/240x150.png/06C755/808080",
+        "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
         "size": "full",
         "aspectRatio": "20:13",
         "aspectMode": "cover",
@@ -171,14 +171,24 @@
         "contents": [
           {
             "type": "text",
-            "text": "(ゲームの説明)",
-            "weight": "bold",
-            "size": "xl"
+            "text": "本日は理科一類1年29組🇩🇪の五月祭企画、HONGO QUESTにご参加いただきありがとうございます！",
+            "wrap": true,
+            "size": "sm",
+            "margin": "md"
           },
           {
             "type": "text",
-            "text": "this game is a game so please play thank you.",
-            "wrap": true
+            "text": "HONGO QUESTは謎を解きながら東大について知ることができる企画となっており、キャンパスとオンラインの両方から参加が可能となっています。",
+            "size": "sm",
+            "wrap": true,
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "text": "後日、クリア時間や正答率に応じたランキング発表なども行う予定ですのでお楽しみに！",
+            "wrap": true,
+            "margin": "md",
+            "size": "sm"
           }
         ]
       },
@@ -191,7 +201,7 @@
             "type": "button",
             "action": {
               "type": "message",
-              "label": "Start",
+              "label": "ゲーム開始",
               "text": "ゲーム開始"
             },
             "style": "primary"
@@ -202,7 +212,7 @@
             "action": {
               "type": "message",
               "text": "詳しく教えてください",
-              "label": "Learn More"
+              "label": "詳しく教えてください"
             },
             "margin": "md"
           }
@@ -282,6 +292,212 @@
             "style": "secondary"
           }
         ]
+      }
+    },
+    "nickname": {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ニックネームは",
+            "wrap": true,
+            "size": "sm",
+            "margin": "none"
+          },
+          {
+            "type": "text",
+            "text": "nickname",
+            "size": "md",
+            "wrap": true,
+            "margin": "md",
+            "weight": "bold",
+            "align": "center"
+          },
+          {
+            "type": "text",
+            "text": "でよろしいですか？",
+            "wrap": true,
+            "margin": "md",
+            "size": "md"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "はい",
+              "text": "はい"
+            },
+            "style": "primary"
+          },
+          {
+            "type": "button",
+            "style": "secondary",
+            "action": {
+              "type": "message",
+              "text": "入力し直す",
+              "label": "入力し直す"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
+      }
+    },
+    "start_confirm": {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "【注意点】",
+            "weight": "bold",
+            "color": "#DC3545",
+            "align": "center",
+            "size": "md"
+          },
+          {
+            "type": "text",
+            "wrap": true,
+            "size": "xs",
+            "margin": "md",
+            "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+            "contents": [
+              {
+                "type": "span",
+                "text": "・問題の解答には"
+              },
+              {
+                "type": "span",
+                "text": "ひらがな",
+                "weight": "bold",
+                "color": "#404040"
+              },
+              {
+                "type": "span",
+                "text": "、または"
+              },
+              {
+                "type": "span",
+                "text": "半角数字",
+                "weight": "bold",
+                "color": "#404040"
+              },
+              {
+                "type": "span",
+                "text": "のみを使用してください。"
+              }
+            ],
+            "color": "#808080"
+          },
+          {
+            "type": "text",
+            "wrap": true,
+            "size": "xs",
+            "margin": "md",
+            "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+            "contents": [
+              {
+                "type": "span",
+                "text": "・解答にはなるべくを"
+              },
+              {
+                "type": "span",
+                "text": "一般的な名称",
+                "weight": "bold"
+              },
+              {
+                "type": "span",
+                "text": "を使用してください。"
+              }
+            ],
+            "color": "#808080"
+          },
+          {
+            "type": "separator",
+            "margin": "md",
+            "color": "#808080"
+          },
+          {
+            "type": "text",
+            "text": "注意点を読み、下のボタンを押してゲームを開始してください。",
+            "wrap": true,
+            "size": "sm",
+            "margin": "xl"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "style": "primary",
+            "action": {
+              "type": "postback",
+              "label": "START!",
+              "data": "ゲーム開始"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
+      }
+    },
+    "place": {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "wrap": true,
+            "size": "sm",
+            "margin": "none",
+            "text": "あなたはどちらからのご参加ですか？"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "キャンパス",
+              "text": "キャンパス"
+            },
+            "style": "secondary"
+          },
+          {
+            "type": "button",
+            "style": "secondary",
+            "action": {
+              "type": "message",
+              "text": "オンライン",
+              "label": "オンライン"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
       }
     }
   }

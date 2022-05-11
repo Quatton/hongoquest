@@ -19,6 +19,8 @@ import {
   removeUserData,
   endGame,
   updateWrong,
+  proceedToMenu,
+  updateUserData,
 } from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
@@ -109,18 +111,21 @@ const replyText = (token, texts) => {
   );
 };
 
-const sendQuestion = (token, stage) => {
-  const question = questions[stage];
+const sendQuestion = (token, userId) => {
+  const { data } = await getUserCurrentGame(userId);
+  const { stage, mode } = data;
+  const question = questions[mode][stage];
   const texts = Array.isArray(question.question)
     ? question.question
     : [question.question];
-  const message = texts.map((text) => ({ type: "text", text }));
+  const message =
+    texts[0] === "" ? [] : texts.map((text) => ({ type: "text", text }));
   if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
   if (question.picture) {
     const originalPath = path.join(
       path.resolve(),
       "static/question_img",
-      `${question.picture}.jpg`
+      `${question.picture}.png`
     );
     const previewPath = path.join(
       path.resolve(),
@@ -135,7 +140,7 @@ const sendQuestion = (token, stage) => {
 
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
-        `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
+        `convert -resize 240x png:${originalPath} jpeg:${previewPath}`
       );
     }
 
@@ -181,7 +186,7 @@ function handleEvent(event) {
       getUserData(event.source.userId).catch((err) => {
         client.getProfile(event.source.userId).then((profile) => {
           writeUserData(event.source.userId, {
-            name: profile.displayName,
+            menu_stage: 0,
           });
         });
       });
@@ -207,6 +212,12 @@ function handleEvent(event) {
       if (data === "DATE" || data === "TIME" || data === "DATETIME") {
         data += `(${JSON.stringify(event.postback.params)})`;
       }
+
+      if (data === "ゲーム開始") {
+        proceedNextStage(event.source.userId);
+        return sendQuestion(event.replyToken, userId);
+      }
+
       return replyText(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
@@ -218,8 +229,6 @@ function handleEvent(event) {
 }
 
 async function handleText(message, replyToken, source) {
-  const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
-
   // userId が必要。常時は問題ないはず。
   if (!source.userId) return replyText(replyToken, "ユーザーIDが必要");
 
@@ -230,27 +239,80 @@ async function handleText(message, replyToken, source) {
   if (!data.current_game) {
     // データベースの存在を確認する
 
-    // でなければ「ゲーム開始」だけ対応
+    switch (data.menu_stage) {
+      case 0:
+        if (message.text === "ゲーム開始") {
+          if (!data.name) {
+            proceedToMenu(source.userId);
+            return replyText(replyToken, [
+              "まずはじめに、あなたのニックネームを送信してください。",
+              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。)",
+            ]);
+          } else {
+            proceedToMenu(source.userId, 3);
+            return sendFlexMessage(replyToken, flex_messages.place);
+          }
+        }
+      case 1:
+        const nickname_confirm = flex_messages.nickname;
+        nickname_confirm.body.contents[1].text = message.text;
+        proceedToMenu(source.userId);
+        updateUserData(source.userId, {
+          name: message.text,
+        });
+        return sendFlexMessage(replyToken, nickname_confirm);
+      case 2:
+        switch (message.text) {
+          case "はい":
+            proceedToMenu(source.userId);
+            return sendFlexMessage(replyToken, flex_messages.place);
+          case "入力し直す":
+            proceedToMenu(source.userId, 1);
+            return replyMessage(replyToken, [
+              "まずはじめに、あなたのニックネームを送信してください。",
+              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+            ]);
+          default:
+            return replyMessage(replyToken, [
+              "【はい】か【入力し直す】をお選びください。",
+            ]);
+        }
+      case 3:
+        switch (message.text) {
+          case "キャンパス":
+            proceedToMenu(source.userId);
+            return replyMessage(replyToken, [
+              "問題の難易度を選択してください。",
+            ]);
+          case "オンライン":
+            proceedToMenu(source.userId, 0);
+            newGameData(source.userId, 2);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+          default:
+            return replyMessage(replyToken, [
+              "【キャンパス】か【オンライン】をお選びください。",
+            ]);
+        }
+      case 4:
+        switch (message.text) {
+          case "難しい":
+            proceedToMenu(source.userId, 1);
+            newGameData(source.userId, 0);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+          case "普通":
+            proceedToMenu(source.userId, 1);
+            newGameData(source.userId, 1);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+          default:
+            return replyMessage(replyToken, [
+              "【難しい】か【普通】をお選びください。",
+            ]);
+        }
+    }
+
     switch (message.text) {
       case "ゲーム開始":
-        if (source.userId) {
-          const profile = await client.getProfile(source.userId);
-
-          // データベースが既にあるか
-          await newGameData(source.userId);
-
-          return client.replyMessage(replyToken, {
-            type: "template",
-            altText: "Game start confirmation",
-            template: {
-              type: "confirm",
-              text: "Please Pick difficulty",
-              actions: [
-                { label: "Easy", type: "message", text: "easy" },
-                { label: "Hard", type: "message", text: "hard" },
-              ],
-            },
-          });
+        switch (data.menu_stage) {
         }
       case "詳しく教えてください。":
         return replyText(replyToken, [
@@ -271,7 +333,9 @@ async function handleText(message, replyToken, source) {
 
   switch (message.text) {
     case "ゲーム開始":
-      return replyText(replyToken, [`bro you're in a game rn`]);
+      return replyText(replyToken, [
+        `(how do i tell them that they are in a game rn?)`,
+      ]);
 
     case "詳しく教えてください。":
       return replyText(replyToken, [
@@ -299,44 +363,26 @@ async function handleText(message, replyToken, source) {
       }
 
     default:
-      if (!stage) {
-        switch (message.text) {
-          case "easy":
-            await proceedNextStage(source.userId);
-            return await sendQuestion(replyToken, stage + 1);
-          case "hard":
-            await proceedNextStage(source.userId);
-            return await sendQuestion(replyToken, stage + 1);
-          case "online":
-            await proceedNextStage(source.userId);
-            return await sendQuestion(replyToken, stage + 1);
-          default:
-            return await replyText(replyToken, "just pick one");
-        }
-      }
-
       if (message.text === questionData.answer) {
-        //proceed to the next stage
-        const res = await proceedNextStage(source.userId);
+        //proceed to the next stagedownloaded
+        await proceedNextStage(source.userId);
 
-        if (res) {
-          if (stage === questions.length - 1) {
-            endGame(source.userId).then((data) => {
-              const { time, wrong } = data;
-              const congrats = flex_messages.congrats;
-              congrats.body.contents[0].text = time;
-              congrats.body.contents[1].text = `Wrong Answers: ${wrong}`;
-              return sendFlexMessage(
-                replyToken,
-                congrats,
-                `Congratulations! You completed the challenge in ${time} with ${wrong} wrong answer${
-                  wrong > 1 ? "s" : ""
-                }`
-              );
-            });
-          } else {
-            return await sendQuestion(replyToken, stage + 1);
-          }
+        if (stage === questions.length - 1) {
+          endGame(source.userId).then((data) => {
+            const { time, wrong } = data;
+            const congrats = flex_messages.congrats;
+            congrats.body.contents[0].text = time;
+            congrats.body.contents[1].text = `Wrong Answers: ${wrong}`;
+            return sendFlexMessage(
+              replyToken,
+              congrats,
+              `Congratulations! You completed the challenge in ${time} with ${wrong} wrong answer${
+                wrong > 1 ? "s" : ""
+              }`
+            );
+          });
+        } else {
+          return await sendQuestion(replyToken, source.userId);
         }
       } else {
         updateWrong(key);
