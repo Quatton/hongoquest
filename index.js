@@ -338,12 +338,12 @@ function handleImage(message, replyToken) {
   let getContent;
   if (message.contentProvider.type === "line") {
     const downloadPath = path.join(
-      __dirname,
+      path.resolve(),
       "downloaded",
       `${message.id}.jpg`
     );
     const previewPath = path.join(
-      __dirname,
+      path.resolve(),
       "downloaded",
       `${message.id}-preview.jpg`
     );
@@ -381,12 +381,12 @@ function handleVideo(message, replyToken) {
   let getContent;
   if (message.contentProvider.type === "line") {
     const downloadPath = path.join(
-      __dirname,
+      path.resolve(),
       "downloaded",
       `${message.id}.mp4`
     );
     const previewPath = path.join(
-      __dirname,
+      path.resolve(),
       "downloaded",
       `${message.id}-preview.jpg`
     );
@@ -422,7 +422,7 @@ function handleAudio(message, replyToken) {
   let getContent;
   if (message.contentProvider.type === "line") {
     const downloadPath = path.join(
-      __dirname,
+      path.resolve(),
       "downloaded",
       `${message.id}.m4a`
     );
