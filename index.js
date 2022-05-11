@@ -95,6 +95,7 @@ app.post("/callback", line.middleware(config), (req, res) => {
     .then(() => res.end())
     .catch((err) => {
       console.error(err);
+      console.error(err.response.data);
       res.status(500).end();
     });
 });
