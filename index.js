@@ -114,7 +114,7 @@ const replyText = (token, texts) => {
 const sendQuestion = async (token, userId) => {
   const { data: gameData } = await getUserCurrentGame(userId);
   const { progress, mode } = gameData;
-  const stage = progress.length;
+  const stage = progress.length - 1;
   const question = questions[mode][stage];
   const texts = Array.isArray(question.question)
     ? question.question
@@ -217,7 +217,7 @@ function handleEvent(event) {
       }
 
       if (data === "ゲーム開始") {
-        proceedNextStage(event.source.userId);
+        await proceedNextStage(event.source.userId);
         return sendQuestion(event.replyToken, event.source.userId);
       }
 
