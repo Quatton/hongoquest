@@ -114,12 +114,6 @@ const sendQuestion = (token, stage) => {
   const message = texts.map((text) => ({ type: "text", text }));
   if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
   if (question.picture) {
-    const picUrl = path.join(
-      baseURL,
-      `/static/question_img/${question.picture}`
-    );
-    const original = `${picUrl}.jpg`;
-    const preview = `${picUrl}-preview.jpg`;
     const originalPath = path.join(
       path.resolve(),
       "static/question_img",
@@ -130,13 +124,22 @@ const sendQuestion = (token, stage) => {
       "static/question_img",
       `${question.picture}-preview.jpg`
     );
-    cp.execSync(
-      `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
-    );
+
+    const originalContentUrl =
+      baseURL + "/static/question_img/" + path.basename(downloadPath);
+    const previewImageUrl =
+      baseURL + "/static/question_img/" + path.basename(previewPath);
+
+    if (!fs.existsSync(previewPath)) {
+      cp.execSync(
+        `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
+      );
+    }
+
     message.push({
       type: "image",
-      originalContentUrl: original,
-      previewImageUrl: preview,
+      originalContentUrl,
+      previewImageUrl,
     });
   }
 
