@@ -114,7 +114,10 @@ const sendQuestion = (token, stage) => {
   const message = texts.map((text) => ({ type: "text", text }));
   if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
   if (question.picture) {
-    const picUrl = `${baseURL}/static/question_img/${question.picture}`;
+    const picUrl = path.join(
+      baseURL,
+      `/static/question_img/${question.picture}`
+    );
     const original = `${picUrl}.jpg`;
     const preview = `${picUrl}-preview.jpg`;
     cp.execSync(`convert -resize 240x jpeg:${original} jpeg:${preview}`);
