@@ -129,9 +129,9 @@ const sendQuestion = (token, stage) => {
     );
 
     const originalContentUrl =
-      baseURL + "/static/question_img" + path.basename(originalPath);
+      baseURL + "/static/question_img/" + path.basename(originalPath);
     const previewImageUrl =
-      baseURL + "/static/question_img" + path.basename(previewPath);
+      baseURL + "/static/question_img/" + path.basename(previewPath);
 
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
@@ -139,15 +139,11 @@ const sendQuestion = (token, stage) => {
       );
     }
 
-    message.push(
-      {
-        type: "image",
-        originalContentUrl,
-        previewImageUrl,
-      },
-      { type: "text", text: originalContentUrl },
-      { type: "text", text: previewImageUrl }
-    );
+    message.push({
+      type: "image",
+      originalContentUrl,
+      previewImageUrl,
+    });
   }
 
   return client.replyMessage(token, message);
