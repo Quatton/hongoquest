@@ -370,8 +370,7 @@ async function handleText(message, replyToken, source) {
       if (questionData.answer.includes(message.text)) {
         //proceed to the next stagedownloaded
         await proceedNextStage(source.userId);
-        console.log(stage, questions[mode].length - 1);
-        if (!questions[mode][stage]) {
+        if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
             const congrats = flex_messages.congrats;

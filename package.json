@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "name": "kitchensink",
-  "version": "0.0.0",
-  "description": "A kitchen-sink LINE bot example",
+  "name": "hongoquest",
+  "version": "1.0",
+  "description": "A LINE bot for interaction with users in a quiz game dedicated for The University of Tokyo May Festival (五月祭）理科一類29組",
   "main": "index.js",
   "scripts": {
     "build-sdk": "cd ../../; npm i; npm run build",
