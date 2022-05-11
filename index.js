@@ -144,7 +144,7 @@ const sendQuestion = (token, stage) => {
       );
     }
 
-    message = {
+    message[0] = {
       type: "image",
       originalContentUrl,
       previewImageUrl,
