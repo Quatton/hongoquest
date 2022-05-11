@@ -449,7 +449,8 @@
             "action": {
               "type": "postback",
               "label": "START!",
-              "data": "ゲーム開始"
+              "data": "ゲーム開始",
+              "displayText": "START!"
             },
             "margin": "md"
           }

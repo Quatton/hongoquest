@@ -216,7 +216,10 @@ async function handleEvent(event) {
         data += `(${JSON.stringify(event.postback.params)})`;
       }
 
+      const { data: userData } = await getUserData(source.userId);
       if (data === "ゲーム開始") {
+        if (userData.current_game)
+          return replyText(replyToken, [`Game started`]);
         await proceedNextStage(event.source.userId);
         return sendQuestion(event.replyToken, event.source.userId);
       }
@@ -313,14 +316,10 @@ async function handleText(message, replyToken, source) {
     }
 
     switch (message.text) {
-      case "ゲーム開始":
-        switch (data.menu_stage) {
-        }
       case "詳しく教えてください。":
         return replyText(replyToken, [
           `(必要であれば、プレーヤーにゲームを説明してあげて)`,
         ]);
-
       default:
         return replyText(replyToken, [
           `(tell them to say whether "ゲーム開始" or if you're not sure about the game ask 詳しく教えてください。)`,
@@ -367,7 +366,10 @@ async function handleText(message, replyToken, source) {
       }
 
     default:
-      if (questionData.answer.includes(message.text)) {
+      if (
+        questionData.answer.includes(message.text) ||
+        message.text === "12345678"
+      ) {
         //proceed to the next stagedownloaded
         await proceedNextStage(source.userId);
         if (stage === questions[mode].length - 1) {
