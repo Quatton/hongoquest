@@ -114,22 +114,28 @@ const sendQuestion = (token, stage) => {
   const message = texts.map((text) => ({ type: "text", text }));
   if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
   if (question.picture) {
-    const originalContentUrl =
-      baseURL + "/static/question_img/" + path.basename(originalPath);
-    const previewImageUrl =
-      baseURL + "/static/question_img/" + path.basename(previewPath);
-    if (!fs.existsSync(previewPath)) {
-      const originalPath = path.join(
-        path.resolve(),
-        "static/question_img",
-        `${question.picture}.jpg`
-      );
-      const previewPath = path.join(
-        path.resolve(),
-        "static/question_img",
-        `${question.picture}-preview.jpg`
-      );
+    const originalPath = path.join(
+      path.resolve(),
+      "static/question_img",
+      `${question.picture}.jpg`
+    );
+    const previewPath = path.join(
+      path.resolve(),
+      "static/question_img",
+      `${question.picture}-preview.jpg`
+    );
 
+    const originalContentUrl = path.join(
+      baseURL,
+      "/static/question_img/",
+      path.basename(originalPath)
+    );
+    const previewImageUrl = path.join(
+      baseURL,
+      "/static/question_img/",
+      path.basename(previewPath)
+    );
+    if (!fs.existsSync(previewPath)) {
       cp.execSync(
         `convert -resize 240x jpeg:${originalPath} jpeg:${previewPath}`
       );
@@ -364,10 +370,16 @@ function handleImage(message, replyToken) {
         );
 
         return {
-          originalContentUrl:
-            baseURL + "/downloaded/" + path.basename(downloadPath),
-          previewImageUrl:
-            baseURL + "/downloaded/" + path.basename(previewPath),
+          originalContentUrl: path.join(
+            baseURL,
+            "/downloaded/",
+            path.basename(downloadPath)
+          ),
+          previewImageUrl: path.join(
+            baseURL,
+            "/downloaded/",
+            path.basename(previewPath)
+          ),
         };
       }
     );
