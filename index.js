@@ -117,6 +117,7 @@ const sendQuestion = (token, stage) => {
     const picUrl = `${baseURL}/static/question_img/${question.picture}`;
     const original = `${picUrl}.jpg`;
     const preview = `${picUrl}-preview.jpg`;
+    cp.execSync(`convert -resize 240x jpeg:${original} jpeg:${preview}`);
     message.push({
       type: "image",
       originalContentUrl: original,

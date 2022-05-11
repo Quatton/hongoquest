@@ -10,7 +10,7 @@
     {
       "id": 1,
       "question": "1 + 1 = ?",
-      "picture": false,
+      "picture": "stage1.jpg",
       "answer": "2",
       "hint": "Why would you need a hint?"
     },
