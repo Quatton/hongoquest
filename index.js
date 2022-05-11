@@ -121,7 +121,7 @@ const sendQuestion = async (token, userId) => {
     : [question.question];
   const message =
     texts[0] === "" ? [] : texts.map((text) => ({ type: "text", text }));
-  if (stage > 1) message.unshift({ type: "text", text: "Correct!" });
+  if (stage > 1) message.unshift({ type: "text", text: "正解です！" });
   if (question.picture) {
     const originalPath = path.join(
       path.resolve(),
@@ -370,8 +370,8 @@ async function handleText(message, replyToken, source) {
       if (questionData.answer.includes(message.text)) {
         //proceed to the next stagedownloaded
         await proceedNextStage(source.userId);
-
-        if (stage === questions[mode].length - 1) {
+        console.log(stage, questions[mode].length - 1);
+        if (stage >= questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
             const congrats = flex_messages.congrats;
@@ -390,7 +390,11 @@ async function handleText(message, replyToken, source) {
         }
       } else {
         updateWrong(key);
-        return await replyText(replyToken, "Wrong answers");
+        return await replyText(replyToken, [
+          "不正解です😢\nもう一度よく考えてみましょう！",
+
+          "答えが合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているか確認してみてください。",
+        ]);
       }
   }
 }
