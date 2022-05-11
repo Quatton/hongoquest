@@ -216,9 +216,9 @@ async function handleEvent(event) {
         data += `(${JSON.stringify(event.postback.params)})`;
       }
 
-      const { data: userData } = await getUserData(source.userId);
+      const { data: gameData } = await getUserCurrentGame(event.source.userId);
       if (data === "ゲーム開始") {
-        if (userData.current_game)
+        if (gameData.progress.length > 1)
           return replyText(replyToken, [`Game started`]);
         await proceedNextStage(event.source.userId);
         return sendQuestion(event.replyToken, event.source.userId);
@@ -340,6 +340,9 @@ async function handleText(message, replyToken, source) {
         `(how do i tell them that they are in a game rn?)`,
       ]);
 
+    case "START!":
+      console.log("it's counted");
+      return;
     case "詳しく教えてください。":
       return replyText(replyToken, [
         `(必要であれば、プレーヤーにゲームを説明してあげて)`,
