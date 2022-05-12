@@ -415,10 +415,10 @@ async function handleText(message, replyToken, source) {
           // last_stageだと、これが最後と表示すればいい？
           // >> しておきます！
 
-          if (stage === questions[mode].length - 2) {
-             next_question.body.contents[0].color = "#DC3545";
-             next_question.footer.contents[0].action.label = "最後の問題を表示";
-           }
+          //if (stage === questions[mode].length - 2) {
+          //   next_question.body.contents[0].color = "#DC3545";
+          //   next_question.footer.contents[0].action.label = "最後の問題を表示";
+          // }
 
           const message = [
             { type: "text", text: "正解です！" },
