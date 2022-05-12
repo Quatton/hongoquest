@@ -213,19 +213,21 @@ async function handleEvent(event) {
       // START!
       switch (data) {
         case "KR4TNHBEG84279-3":
+          await proceedNextStage(event.source.userId);
           return sendQuestion(event.replyToken, event.source.userId);
         case "FEIUQEGFQUEIFQGF":
           if (gameData.progress.length === 1) {
-            await proceedNextStage(event.source.userId);
             const next_question = flex_messages.next_question;
 
             next_question.body.contents[0].text = `Q1`;
             next_question.footer.contents[0].action.displayText = `問題を表示`;
-            return sendFlexMessage(
-              event.replyToken,
-              next_question,
-              `問題を表示`
-            );
+            return client.replyMessage(event.replyToken, [
+              {
+                type: "text",
+                text: "(ボタンを押してください何とか言ってくれればいいじゃない？)",
+              },
+              { type: flex, contents: next_question, altText: "問題を表示" },
+            ]);
           }
       }
 
