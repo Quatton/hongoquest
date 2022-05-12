@@ -576,9 +576,9 @@
         "height": "md",
         "action": {
           "type": "postback",
-          "label": "次の問題を表示",
+          "label": "問題を表示",
           "data": "KR4TNHBEG84279-3",
-          "displayText": "問題 3 表示"
+          "displayText": "問題{}を表示"
         }
       }
     ],

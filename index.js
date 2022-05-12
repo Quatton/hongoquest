@@ -395,7 +395,8 @@ async function handleText(message, replyToken, source) {
           });
         } else {
           const next_question = flex_messages.next_question;
-          next_question.body.contents[0].text = `Q${stage}`
+          next_question.body.contents[0].text = `Q${stage + 1}`
+          next_question.footer.contents[0].displayText = `Q${stage + 1}を表示`
           return await sendFlexMessage(replyToken, next_question);
         }
       } else {
