@@ -214,7 +214,7 @@ async function handleEvent(event) {
       switch (data) {
         case "KR4TNHBEG84279-3":
           // 問題をまた表示するとき、next stageに進むとは限らない？
-          await proceedNextStage(event.source.userId);
+          // await proceedNextStage(event.source.userId);
           return sendQuestion(event.replyToken, event.source.userId);
         case "FEIUQEGFQUEIFQGF":
           if (gameData.progress.length === 1) {
