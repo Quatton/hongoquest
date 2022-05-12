@@ -362,7 +362,7 @@ async function handleText(message, replyToken, source) {
       const usedHint = gameData.hint.at(-1);
 
       if (usedHint >= hints.length) {
-        return replyText(replyToken, "もうない");
+        return replyText(replyToken, "もうないよ");
       }
       if (time_diff < 10000 * (usedHint + 1)) {
         return replyText(replyToken, [
