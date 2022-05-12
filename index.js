@@ -376,7 +376,7 @@ async function handleText(message, replyToken, source) {
           )} seconds`,
         ]);
       } else {
-        useHint(key);
+        await useHint(key);
         return replyText(replyToken, [
           hints[usedHint],
           usedHint >= hints.length
