@@ -52,7 +52,6 @@ function sendFlexMessage(
   flex_message,
   altText = "A flex message"
 ) {
-
   // text message pattern
   const testMessage = {
     type: "flex",
@@ -119,9 +118,7 @@ const replyText = (token, texts) => {
   );
 };
 
-
 const sendQuestion = async (token, userId) => {
-
   // get gameData
   const { data: gameData } = await getUserCurrentGame(userId);
   const { progress, mode } = gameData;
@@ -138,7 +135,7 @@ const sendQuestion = async (token, userId) => {
 
   if (question.picture) {
     const originalPath = path.join(
-      path.resolve(),　// "./"
+      path.resolve(), // "./"
       "static/question_img",
       `${question.picture}.png`
     );
@@ -189,10 +186,8 @@ async function handleEvent(event) {
     case "follow":
       // Generate database
       getUserData(event.source.userId).catch((err) => {
-
-          writeUserData(event.source.userId, {
-            menu_stage: 0,
-
+        writeUserData(event.source.userId, {
+          menu_stage: 0,
         });
       });
 
@@ -312,7 +307,7 @@ async function handleText(message, replyToken, source) {
         }
     }
 
-    // menu_stage 以外　
+    // menu_stage 以外
     switch (message.text) {
       case "詳しく教えてください":
         return replyText(replyToken, [
@@ -335,9 +330,7 @@ async function handleText(message, replyToken, source) {
   // current_gameがすでに存在する場合のメッセージ対応
   switch (message.text) {
     case "ゲーム開始":
-      return replyText(replyToken, [
-        "ゲームを開始しました。",
-      ]);
+      return replyText(replyToken, ["ゲームを開始しました。"]);
 
     case "詳しく教えてください":
       return replyText(replyToken, [
@@ -357,7 +350,10 @@ async function handleText(message, replyToken, source) {
       const usedHint = gameData.hint.at(-1);
 
       if (usedHint >= hints.length) {
-        return replyText(replyToken, "ヒントは以上です！\nここからは自力で考えてみよう！");
+        return replyText(
+          replyToken,
+          "ヒントは以上です！\nここからは自力で考えてみよう！"
+        );
       }
 
       // ある時間がたってから
@@ -369,7 +365,10 @@ async function handleText(message, replyToken, source) {
         ]);
       } else {
         useHint(key);
-        return replyText(replyToken, [hints[usedHint], "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。"]);
+        return replyText(replyToken, [
+          hints[usedHint],
+          "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
+        ]);
       }
 
     default:
@@ -396,13 +395,17 @@ async function handleText(message, replyToken, source) {
         } else {
           const next_question = flex_messages.next_question;
 
-          next_question.body.contents[0].text = `Q${stage + 1}`
-          next_question.footer.contents[0].action.displayText = `問題を表示`
-          const message = [{type: "text", text: "正解です！"}, {
-            type: "flex",
-            altText: "問題を表示",
-            contents: next_question,
-          }]
+          next_question.body.contents[0].text = `Q${stage + 1}`;
+          next_question.footer.contents[0].action.displayText = `問題を表示`;
+          const message = [
+            { type: "text", text: "正解です！" },
+            { type: "text", text: questionData.tips },
+            {
+              type: "flex",
+              altText: "問題を表示",
+              contents: next_question,
+            },
+          ];
           return await client.replyMessage(replyToken, message);
         }
       } else {
