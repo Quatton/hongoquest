@@ -404,7 +404,7 @@
         "type": "button",
         "action": {
           "type": "message",
-          "label": "Play Again",
+          "label": "ゲーム開始",
           "text": "ゲーム開始"
         },
         "offsetTop": "none",
