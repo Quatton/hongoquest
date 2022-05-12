@@ -376,10 +376,10 @@ async function handleText(message, replyToken, source) {
           )} seconds`,
         ]);
       } else {
-        await useHint(key);
+        useHint(key);
         return replyText(replyToken, [
           hints[usedHint],
-          usedHint >= hints.length
+          usedHint + 1 >= hints.length
             ? "ヒントは以上です！\nここからは自力で考えてみよう！"
             : "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
         ]);
