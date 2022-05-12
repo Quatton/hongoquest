@@ -153,73 +153,76 @@
       }
     },
     "game_start": {
-      "type": "bubble",
-      "hero": {
-        "type": "image",
-        "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
-        "size": "full",
-        "aspectRatio": "20:13",
-        "aspectMode": "cover",
-        "action": {
-          "type": "uri",
-          "uri": "http://linecorp.com/"
-        }
+  "type": "bubble",
+  "hero": {
+    "type": "image",
+    "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
+    "size": "full",
+    "aspectRatio": "20:13",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "http://linecorp.com/"
+    }
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
+        "wrap": true,
+        "align": "center",
+        "size": "md",
+        "margin": "none"
       },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "text",
-            "text": "本日は理科一類1年29組🇩🇪の五月祭企画、HONGO QUESTにご参加いただきありがとうございます！",
-            "wrap": true,
-            "size": "sm",
-            "margin": "md"
-          },
-          {
-            "type": "text",
-            "text": "HONGO QUESTは謎を解きながら東大について知ることができる企画となっており、キャンパスとオンラインの両方から参加が可能となっています。",
-            "size": "sm",
-            "wrap": true,
-            "margin": "lg"
-          },
-          {
-            "type": "text",
-            "text": "後日、クリア時間や正答率に応じたランキング発表なども行う予定ですのでお楽しみに！",
-            "wrap": true,
-            "margin": "lg",
-            "size": "sm"
-          }
-        ]
+      {
+        "type": "separator",
+        "margin": "lg",
+        "color": "#000000"
       },
-      "footer": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "button",
-            "action": {
-              "type": "message",
-              "label": "ゲーム開始",
-              "text": "ゲーム開始"
-            },
-            "style": "primary"
-          },
-          {
-            "type": "button",
-            "style": "secondary",
-            "action": {
-              "type": "message",
-              "text": "詳しく教えてください",
-              "label": "詳しく教えてください"
-            },
-            "margin": "md"
-          }
-        ],
-        "flex": 0
+      {
+        "type": "text",
+        "text": "HONGO QUESTは、謎を解きながら\n東大について知ることができる\n企画となっており、キャンパスと\nオンラインの両方から\n参加が可能となっています。",
+        "size": "md",
+        "wrap": true,
+        "align": "center",
+        "margin": "lg"
+      },
+      {
+        "type": "separator",
+        "margin": "lg",
+        "color": "#000000"
+      },
+      {
+        "type": "text",
+        "text": "後日、クリア時間や正答率に応じた\nランキング発表も行う予定です👑\nお楽しみに！",
+        "wrap": true,
+        "size": "md",
+        "align": "center",
+        "margin": "lg"
       }
-    },
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "action": {
+          "type": "message",
+          "label": "ゲーム開始",
+          "text": "ゲーム開始"
+        },
+        "style": "primary"
+      }
+    ],
+    "flex": 0
+  }
+},
     "congrats": {
   "type": "bubble",
   "header": {
@@ -243,20 +246,9 @@
       {
         "type": "text",
         "align": "center",
-        "text": "全問クリアおめでとうございます。",
-        "size": "md"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "align": "center",
-        "text": "あなたのクリア時間は",
-        "size": "md"
+        "text": "全問クリアおめでとうございます。\n\nあなたのクリア時間はこちらです。",
+        "size": "md",
+        "wrap": true
       }
     ]
   },
@@ -274,125 +266,42 @@
       },
       {
         "type": "text",
-        "text": "です。",
-        "margin": "sm",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "text": "後日、初回クリア時間に応じて",
-        "align": "center"
-      },
-      {
-        "type": "text",
-        "text": "ランキング発表を行う予定です👑",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "text": "このアカウントは友だち解除せず",
-        "align": "center"
-      },
-      {
-        "type": "text",
-        "text": "ランキング発表をお待ちください！",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "separator",
-        "color": "#000000"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "text": "本日は、理科一類1年29組🇩🇪の",
-        "align": "center"
+        "text": "間違えた数：",
+        "align": "center",
+        "size": "sm"
       },
       {
         "type": "text",
         "align": "center",
-        "text": "五月祭企画、HONGO QUESTへの"
+        "margin": "xxl",
+        "size": "md",
+        "text": "後日、初回クリア時間に応じて\nランキング発表を行う予定です👑\n\nこのアカウントは友だち解除せず\nランキング発表をお待ちください！",
+        "wrap": true
       },
       {
-        "type": "text",
-        "text": "ご参加ありがとうございました！",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "text": "11月には、東大駒場キャンパスにて",
-        "align": "center"
+        "type": "separator",
+        "color": "#000000",
+        "margin": "lg"
       },
       {
         "type": "text",
         "align": "center",
-        "text": "駒場祭が開催予定です！"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
-      },
-      {
-        "type": "text",
-        "text": "次は駒場祭でお会いしましょう！",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
+        "margin": "lg",
+        "size": "md",
+        "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございました！\n\n11月には、東大駒場キャンパスにて\n駒場祭が開催予定です！\n\n 次は駒場祭でお会いしましょう！",
+        "wrap": true
       },
       {
         "type": "separator",
-        "color": "#000000"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "height": "20px"
+        "color": "#000000",
+        "margin": "lg"
       },
       {
         "type": "text",
-        "text": "続けてゲームを行う場合は",
-        "align": "center"
-      },
-      {
-        "type": "text",
-        "text": "以下のボタンを押してください。",
-        "align": "center"
+        "text": "続けてゲームを行う場合は\n以下のボタンを押してください。",
+        "align": "center",
+        "margin": "lg",
+        "wrap": true
       }
     ]
   },
