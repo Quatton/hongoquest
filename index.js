@@ -214,6 +214,7 @@ async function handleEvent(event) {
       switch (data) {
         case "KR4TNHBEG84279-3":
           // 問題をまた表示するとき、next stageに進むとは限らない？
+          // 違うどこかにproceednextstageがあるはず
           await proceedNextStage(event.source.userId);
           return sendQuestion(event.replyToken, event.source.userId);
         case "FEIUQEGFQUEIFQGF":
@@ -397,6 +398,7 @@ async function handleText(message, replyToken, source) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
             const congrats = flex_messages.congrats;
+            // nickname をどうにか取得して
             // congrats.header.contents[0].text = nickname + " さん"
             congrats.body.contents[0].text = time;
             congrats.body.contents[1].text = `間違えた数：${wrong}`;
@@ -409,7 +411,7 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
-          // ここに入れても動かなかった（泣）
+          // ここにproceednextstage入れても動かなかった（泣）
           // await proceedNextStage(source.userId);
 
           const next_question = flex_messages.next_question;
