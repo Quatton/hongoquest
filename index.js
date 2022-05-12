@@ -257,8 +257,7 @@ async function handleText(message, replyToken, source) {
           if (!data.name) {
             proceedToMenu(source.userId);
             return replyText(replyToken, [
-              "まずはじめに、あなたのニックネームを送信してください。",
-              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。)",
+              "まずはじめに、あなたのニックネームを送信してください。\n（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。)",
             ]);
           } else {
             proceedToMenu(source.userId, 3);
@@ -282,8 +281,7 @@ async function handleText(message, replyToken, source) {
           case "入力し直す":
             proceedToMenu(source.userId, 1);
             return replyText(replyToken, [
-              "まずはじめに、あなたのニックネームを送信してください。",
-              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+              "あなたのニックネームを送信してください。\n（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
             ]);
           default:
             return replyText(replyToken, [
@@ -381,7 +379,9 @@ async function handleText(message, replyToken, source) {
         useHint(key);
         return replyText(replyToken, [
           hints[usedHint],
-          "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
+          usedHint >= hints.length
+            ? "ヒントは以上です！\nここからは自力で考えてみよう！"
+            : "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
         ]);
       }
 
@@ -414,14 +414,8 @@ async function handleText(message, replyToken, source) {
 
           // last_stageだと、これが最後と表示すればいい？
           if (stage === questions[mode].length - 2) {
-            next_question.body.contents.unshift({
-              type: "text",
-              text: "ラスト！頑張りましょう！",
-              wrap: true,
-              size: "sm",
-              margin: "md",
-              align: "center",
-            });
+            next_question.body.contents[0].color = "#DC3545";
+            next_question.footer.contents[0].action.label = "最後の問題を表示";
           }
 
           const message = [
