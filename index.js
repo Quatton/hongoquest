@@ -407,8 +407,8 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
-          await proceedNextStage(event.source.userId);
-          
+          await proceedNextStage(source.userId);
+
           const next_question = flex_messages.next_question;
 
           next_question.body.contents[0].text = `Q${stage + 1}`;
