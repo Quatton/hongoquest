@@ -450,7 +450,7 @@
             "action": {
               "type": "postback",
               "label": "START!",
-              "data": "KR4TNHBEG84279-3"",
+              "data": "KR4TNHBEG84279-3",
               "displayText": "START!"
             },
             "margin": "md"
