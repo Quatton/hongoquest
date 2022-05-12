@@ -211,10 +211,22 @@ async function handleEvent(event) {
       const { data: gameData } = await getUserCurrentGame(event.source.userId);
 
       // START!
-      if (data === "KR4TNHBEG84279-3") {
-        if (gameData.progress.length === 1)
-          await proceedNextStage(event.source.userId);
-        return sendQuestion(event.replyToken, event.source.userId);
+      switch (data) {
+        case "KR4TNHBEG84279-3":
+          return sendQuestion(event.replyToken, event.source.userId);
+        case "FEIUQEGFQUEIFQGF":
+          if (gameData.progress.length === 1) {
+            await proceedNextStage(event.source.userId);
+            const next_question = flex_messages.next_question;
+
+            next_question.body.contents[0].text = `Q1`;
+            next_question.footer.contents[0].action.displayText = `問題を表示`;
+            return sendFlexMessage(
+              event.replyToken,
+              next_question,
+              (altText = `問題を表示`)
+            );
+          }
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
@@ -397,9 +409,13 @@ async function handleText(message, replyToken, source) {
 
           next_question.body.contents[0].text = `Q${stage + 1}`;
           next_question.footer.contents[0].action.displayText = `問題を表示`;
+
+          // last_stageだと、これが最後と
+          if (stage === questions[mode].length - 2) {
+          }
           const message = [
             { type: "text", text: "正解です！" },
-            { type: "text", text: questionData.tips },
+            { type: "text", text: "【豆知識】\n" + questionData.tips },
             {
               type: "flex",
               altText: "問題を表示",
@@ -412,7 +428,7 @@ async function handleText(message, replyToken, source) {
         updateWrong(key);
         return await replyText(replyToken, [
           "不正解です😢\nもう一度よく考えてみましょう!",
-          "解答が合っていると思われるのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。"
+          "解答が合っていると思われるのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。",
         ]);
       }
   }
