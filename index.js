@@ -257,7 +257,7 @@ async function handleText(message, replyToken, source) {
           if (!data.name) {
             proceedToMenu(source.userId);
             return replyText(replyToken, [
-              "まずはじめに、あなたのニックネームを送信してください。\n（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。)",
+              "あなたのニックネームを送信してください。", "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
             ]);
           } else {
             proceedToMenu(source.userId, 3);
