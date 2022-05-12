@@ -226,7 +226,7 @@ async function handleEvent(event) {
                 type: "text",
                 text: "(ボタンを押してください何とか言ってくれればいいじゃない？)",
               },
-              { type: flex, contents: next_question, altText: "問題を表示" },
+              { type: "flex", contents: next_question, altText: "問題を表示" },
             ]);
           }
       }
@@ -412,9 +412,18 @@ async function handleText(message, replyToken, source) {
           next_question.body.contents[0].text = `Q${stage + 1}`;
           next_question.footer.contents[0].action.displayText = `問題を表示`;
 
-          // last_stageだと、これが最後と
+          // last_stageだと、これが最後と表示すればいい？
           if (stage === questions[mode].length - 2) {
+            next_question.body.contents.unshift({
+              type: "text",
+              text: "ラスト！頑張りましょう！",
+              wrap: true,
+              size: "sm",
+              margin: "md",
+              align: "center",
+            });
           }
+
           const message = [
             { type: "text", text: "正解です！" },
             { type: "text", text: "【豆知識】\n" + questionData.tips },
