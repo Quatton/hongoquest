@@ -180,7 +180,7 @@
       {
         "type": "separator",
         "margin": "lg",
-        "color": "#000000"
+        "color": "#808080"
       },
       {
         "type": "text",
@@ -193,7 +193,7 @@
       {
         "type": "separator",
         "margin": "lg",
-        "color": "#000000"
+        "color": "#808080"
       },
       {
         "type": "text",
@@ -280,7 +280,7 @@
       },
       {
         "type": "separator",
-        "color": "#000000",
+        "color": "#808080",
         "margin": "lg"
       },
       {
@@ -293,7 +293,7 @@
       },
       {
         "type": "separator",
-        "color": "#000000",
+        "color": "#808080",
         "margin": "lg"
       },
       {
