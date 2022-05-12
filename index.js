@@ -137,7 +137,7 @@ const sendQuestion = async (token, userId) => {
     const originalPath = path.join(
       path.resolve(), // "./"
       "static/question_img",
-      `${question.picture}.png`
+      `${question.picture}.jpg`
     );
     const previewPath = path.join(
       path.resolve(),
@@ -152,7 +152,7 @@ const sendQuestion = async (token, userId) => {
 
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
-        `convert -resize 720x png:${originalPath} jpeg:${previewPath}`
+        `convert -resize 720x jpg:${originalPath} jpeg:${previewPath}`
       );
     }
 
@@ -413,10 +413,10 @@ async function handleText(message, replyToken, source) {
           next_question.footer.contents[0].action.displayText = `問題を表示`;
 
           // last_stageだと、これが最後と表示すればいい？
-          if (stage === questions[mode].length - 2) {
-            next_question.body.contents[0].color = "#DC3545";
-            next_question.footer.contents[0].action.label = "最後の問題を表示";
-          }
+          // if (stage === questions[mode].length - 2) {
+          //   next_question.body.contents[0].color = "#DC3545";
+          //   next_question.footer.contents[0].action.label = "最後の問題を表示";
+          // }
 
           const message = [
             { type: "text", text: "正解です！" },
