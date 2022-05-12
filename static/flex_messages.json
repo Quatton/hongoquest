@@ -171,6 +171,7 @@
         "contents": [
           {
             "type": "text",
+            "align": "center",
             "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
             "wrap": true,
             "size": "md",
@@ -183,6 +184,7 @@
           },
           {
             "type": "text",
+            "align": "center",
             "text": "HONGO QUESTは、謎を解きながら\n東大について知ることができる\n企画となっており、キャンパスと\nオンラインの両方から\n参加が可能となっています。",
             "size": "md",
             "wrap": true,
@@ -195,6 +197,7 @@
           },
           {
             "type": "text",
+            "align": "center",
             "text": "後日、クリア時間や正答率に応じた\nランキング発表も行う予定です👑\nお楽しみに！",
             "wrap": true,
             "size": "md",
@@ -271,6 +274,7 @@
             "type": "text",
             "margin": "xxl",
             "size": "md",
+            "align": "center",
             "text": "後日、初回クリア時間に応じて\nランキング発表を行う予定です👑\n\nこのアカウントは友だち解除せず\nランキング発表をお待ちください！",
             "wrap": true
           },
@@ -283,6 +287,7 @@
             "type": "text",
             "margin": "lg",
             "size": "md",
+            "align": "center",
             "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございました！\n\n11月には、東大駒場キャンパスにて\n駒場祭が開催予定です！\n\n 次は駒場祭でお会いしましょう！",
             "wrap": true
           },
