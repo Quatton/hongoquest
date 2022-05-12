@@ -213,7 +213,7 @@ async function handleEvent(event) {
       // START!
       switch (data) {
         case "KR4TNHBEG84279-3":
-          await proceedNextStage(event.source.userId);
+          // 問題をまた表示するとき、next stageに進むとは限らない？
           return sendQuestion(event.replyToken, event.source.userId);
         case "FEIUQEGFQUEIFQGF":
           if (gameData.progress.length === 1) {
@@ -407,6 +407,8 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
+          await proceedNextStage(event.source.userId);
+          
           const next_question = flex_messages.next_question;
 
           next_question.body.contents[0].text = `Q${stage + 1}`;
