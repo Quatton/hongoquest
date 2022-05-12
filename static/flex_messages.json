@@ -576,7 +576,7 @@
           {
             "type": "text",
             "wrap": true,
-            "size": "sm",
+            "size": "md",
             "margin": "none",
             "text": "あなたはどちらからのご参加ですか？"
           }
@@ -619,7 +619,7 @@
           {
             "type": "text",
             "wrap": true,
-            "size": "sm",
+            "size": "md",
             "margin": "none",
             "text": "問題の難易度を選択してください。"
           }
