@@ -21,6 +21,7 @@ import {
   updateWrong,
   proceedToMenu,
   updateUserData,
+  useHint,
 } from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
@@ -141,7 +142,7 @@ const sendQuestion = async (token, userId) => {
 
     if (!fs.existsSync(previewPath)) {
       cp.execSync(
-        `convert -resize 240x png:${originalPath} jpeg:${previewPath}`
+        `convert -resize 720x png:${originalPath} jpeg:${previewPath}`
       );
     }
 
@@ -358,14 +359,17 @@ async function handleText(message, replyToken, source) {
         ? questionData.hint
         : [questionData.hint];
 
-      if (time_diff < 10000) {
+      const usedHint = gameData.hint.at(-1);
+
+      if (time_diff < 10000 * (usedHint + 1)) {
         return replyText(replyToken, [
           `Please wait another ${Math.ceil(
             (10000 - time_diff) / 1000
           )} seconds`,
         ]);
       } else {
-        return replyText(replyToken, hints);
+        useHint(key);
+        return replyText(replyToken, hints[usedHint]);
       }
 
     default:

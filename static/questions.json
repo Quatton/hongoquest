@@ -13,28 +13,40 @@
         "question": "",
         "picture": "hardQ1",
         "answer": ["さんしろういけ", "いくとくえんこころじいけ"],
-        "hint": "Why would you need a hint?"
+        "hint": [
+          "ヒント１：日本語に直して考えよう",
+          "ヒント２：dragonとmonkeyがどちらも出てくるものといえば…？"
+        ]
       },
       {
         "id": 2,
         "question": "",
         "picture": "hardQ2",
         "answer": ["けんどうぶ", "とうだいけんどうぶ"],
-        "hint": "You wouldn't need a hint."
+        "hint": [
+          "ヒント１：50音表を見てみよう。矢印が5段あることも関係していそうだ",
+          "ヒント２：謎が解けたら、グラウンドの近くを探索してみよう"
+        ]
       },
       {
         "id": 3,
         "question": "",
         "picture": "hardQ3",
         "answer": ["おおおとこ"],
-        "hint": "Please don't ask for a hint."
+        "hint": [
+          "ヒント１：MはMedical（医療）を表している",
+          "ヒント２：これはとあるモニュメントを表している"
+        ]
       },
       {
         "id": 4,
         "question": "",
         "picture": "hardQ4",
         "answer": ["1827"],
-        "hint": "You still need a hint?"
+        "hint": [
+          "ヒント１：このアカウントのアイコン画像を見てみよう",
+          "ヒント２：数えてみよう。A,B,C,D,E,F,G,H！"
+        ]
       }
     ]
   ]
