@@ -224,7 +224,7 @@ async function handleEvent(event) {
             return client.replyMessage(event.replyToken, [
               {
                 type: "text",
-                text: "(ボタンを押してください何とか言ってくれればいいじゃない？)",
+                text: "下のボタンを押すと問題が表示されます。",
               },
               { type: "flex", contents: next_question, altText: "問題を表示" },
             ]);
