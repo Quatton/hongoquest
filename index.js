@@ -224,7 +224,7 @@ async function handleEvent(event) {
             return sendFlexMessage(
               event.replyToken,
               next_question,
-              (altText = `問題を表示`)
+              `問題を表示`
             );
           }
       }
