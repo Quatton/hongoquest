@@ -214,6 +214,7 @@ async function handleEvent(event) {
       switch (data) {
         case "KR4TNHBEG84279-3":
           // 問題をまた表示するとき、next stageに進むとは限らない？
+          await proceedNextStage(source.userId);
           return sendQuestion(event.replyToken, event.source.userId);
         case "FEIUQEGFQUEIFQGF":
           if (gameData.progress.length === 1) {
@@ -394,8 +395,9 @@ async function handleText(message, replyToken, source) {
         await proceedNextStage(source.userId);
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
-            const { time, wrong } = data;
+            const { time, wrong, nickname } = data;
             const congrats = flex_messages.congrats;
+            congrats.header.contents[0].text = nickname + " さん"
             congrats.body.contents[0].text = time;
             congrats.body.contents[1].text = `間違えた数：${wrong}`;
             return sendFlexMessage(
@@ -407,7 +409,8 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
-          await proceedNextStage(source.userId);
+          // ここに入れても動かなかった（泣
+          // await proceedNextStage(source.userId);
 
           const next_question = flex_messages.next_question;
 
@@ -417,10 +420,10 @@ async function handleText(message, replyToken, source) {
           // last_stageだと、これが最後と表示すればいい？
           // >> しておきます！
 
-          //if (stage === questions[mode].length - 2) {
-          //   next_question.body.contents[0].color = "#DC3545";
-          //   next_question.footer.contents[0].action.label = "最後の問題を表示";
-          // }
+          if (stage === questions[mode].length - 2) {
+             next_question.body.contents[0].color = "#DC3545";
+             next_question.footer.contents[0].action.label = "最後の問題を表示";
+           }
 
           const message = [
             { type: "text", text: "正解です！" },
