@@ -420,7 +420,7 @@ async function handleText(message, replyToken, source) {
 
           const message = [
             { type: "text", text: "正解です！" },
-            { type: "text", text: "【豆知識】\n" + questionData.tips },
+            { type: "text", text: questionData.tips },
             {
               type: "flex",
               altText: "問題を表示",
