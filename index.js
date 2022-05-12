@@ -395,9 +395,9 @@ async function handleText(message, replyToken, source) {
         await proceedNextStage(source.userId);
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
-            const { time, wrong, nickname } = data;
+            const { time, wrong } = data;
             const congrats = flex_messages.congrats;
-            congrats.header.contents[0].text = nickname + " さん"
+            // congrats.header.contents[0].text = nickname + " さん"
             congrats.body.contents[0].text = time;
             congrats.body.contents[1].text = `間違えた数：${wrong}`;
             return sendFlexMessage(
@@ -409,7 +409,7 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
-          // ここに入れても動かなかった（泣
+          // ここに入れても動かなかった（泣）
           // await proceedNextStage(source.userId);
 
           const next_question = flex_messages.next_question;
