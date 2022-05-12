@@ -410,12 +410,13 @@
             "contents": [
               {
                 "type": "span",
-                "text": "・解答にはなるべくを"
+                "text": "・解答にはなるべく"
               },
               {
                 "type": "span",
                 "text": "一般的な名称",
-                "weight": "bold"
+                "weight": "bold",
+                "color": "#404040"
               },
               {
                 "type": "span",

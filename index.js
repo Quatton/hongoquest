@@ -136,7 +136,12 @@ const sendQuestion = async (token, userId) => {
   const message =
     texts[0] === "" ? [] : texts.map((text) => ({ type: "text", text }));
 
-  if (stage > 1) message.unshift({ type: "text", text: "正解です！" });
+  if (stage > 1) {
+
+    // TODO: tips/trivia unshift
+    message.unshift({ type: "text", text: "正解です！" });
+
+  }
 
   if (question.picture) {
     const originalPath = path.join(
