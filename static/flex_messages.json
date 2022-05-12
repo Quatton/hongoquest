@@ -340,7 +340,7 @@
           {
             "type": "text",
             "text": "nickname",
-            "size": "md",
+            "size": "lg",
             "wrap": true,
             "margin": "md",
             "weight": "bold",
@@ -384,111 +384,189 @@
       }
     },
     "start_confirm": {
-      "type": "bubble",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "text",
-            "text": "【注意点】",
-            "weight": "bold",
-            "color": "#DC3545",
-            "align": "center",
-            "size": "md"
-          },
-          {
-            "type": "text",
-            "wrap": true,
-            "size": "xs",
-            "margin": "md",
-            "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
-            "contents": [
-              {
-                "type": "span",
-                "text": "・問題の解答には"
-              },
-              {
-                "type": "span",
-                "text": "ひらがな",
-                "weight": "bold",
-                "color": "#404040"
-              },
-              {
-                "type": "span",
-                "text": "、または"
-              },
-              {
-                "type": "span",
-                "text": "半角数字",
-                "weight": "bold",
-                "color": "#404040"
-              },
-              {
-                "type": "span",
-                "text": "のみを使用してください。"
-              }
-            ],
-            "color": "#808080"
-          },
-          {
-            "type": "text",
-            "wrap": true,
-            "size": "xs",
-            "margin": "md",
-            "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
-            "contents": [
-              {
-                "type": "span",
-                "text": "・解答にはなるべく"
-              },
-              {
-                "type": "span",
-                "text": "一般的な名称",
-                "weight": "bold",
-                "color": "#404040"
-              },
-              {
-                "type": "span",
-                "text": "を使用してください。"
-              }
-            ],
-            "color": "#808080"
-          },
-          {
-            "type": "separator",
-            "margin": "md",
-            "color": "#808080"
-          },
-          {
-            "type": "text",
-            "text": "注意点を読み、下のボタンを押してゲームを開始してください。",
-            "wrap": true,
-            "size": "sm",
-            "margin": "xl"
-          }
-        ]
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "【注意点】",
+        "weight": "bold",
+        "color": "#DC3545",
+        "align": "center",
+        "size": "md"
       },
-      "footer": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
+      {
+        "type": "text",
+        "wrap": true,
+        "size": "xs",
+        "margin": "md",
+        "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
         "contents": [
           {
-            "type": "button",
-            "style": "primary",
-            "action": {
-              "type": "postback",
-              "label": "START!",
-              "data": "KR4TNHBEG84279-3",
-              "displayText": "START!"
-            },
-            "margin": "md"
+            "type": "span",
+            "text": "・問題の解答には",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "ひらがな",
+            "weight": "bold",
+            "color": "#404040",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "、または",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "半角数字",
+            "weight": "bold",
+            "color": "#404040",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "のみを使用してください。",
+            "size": "sm"
           }
         ],
-        "flex": 0
+        "color": "#808080"
+      },
+      {
+        "type": "text",
+        "wrap": true,
+        "size": "xs",
+        "margin": "md",
+        "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+        "contents": [
+          {
+            "type": "span",
+            "text": "・解答にはなるべく",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "一般的な名称",
+            "weight": "bold",
+            "color": "#404040",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "を使用してください。",
+            "size": "sm"
+          }
+        ],
+        "color": "#808080"
+      },
+      {
+        "type": "text",
+        "wrap": true,
+        "size": "xs",
+        "margin": "md",
+        "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+        "contents": [
+          {
+            "type": "span",
+            "text": "・問題解答中に",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "「ヒント」",
+            "size": "sm",
+            "color": "#404040",
+            "weight": "bold"
+          },
+          {
+            "type": "span",
+            "text": "と送信すると、ヒントを見ることができます。",
+            "size": "sm"
+          }
+        ],
+        "color": "#808080"
+      },
+      {
+        "type": "text",
+        "wrap": true,
+        "size": "xs",
+        "margin": "md",
+        "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+        "contents": [
+          {
+            "type": "span",
+            "text": "・ヒントは複数用意されていることもあります。",
+            "size": "sm"
+          }
+        ],
+        "color": "#808080"
+      },
+      {
+        "type": "text",
+        "wrap": true,
+        "size": "xs",
+        "margin": "md",
+        "text": "・問題の解答にはひらがな、または半角数字のみを使用してください。",
+        "contents": [
+          {
+            "type": "span",
+            "text": "・ゲームを途中で終了したい場合は",
+            "size": "sm"
+          },
+          {
+            "type": "span",
+            "text": "「終了」",
+            "size": "sm",
+            "color": "#404040",
+            "weight": "bold"
+          },
+          {
+            "type": "span",
+            "text": "と送信してください。",
+            "size": "sm"
+          }
+        ],
+        "color": "#808080"
+      },
+      {
+        "type": "separator",
+        "margin": "xl",
+        "color": "#808080"
+      },
+      {
+        "type": "text",
+        "text": "注意点を読み、下のボタンを押して\nゲームを開始してください。",
+        "wrap": true,
+        "size": "md",
+        "margin": "xl",
+        "align": "center"
       }
-    },
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "action": {
+          "type": "postback",
+          "label": "START!",
+          "data": "KR4TNHBEG84279-3",
+          "displayText": "START!"
+        },
+        "margin": "md"
+      }
+    ],
+    "flex": 0
+  }
+},
     "place": {
       "type": "bubble",
       "body": {
