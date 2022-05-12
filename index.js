@@ -136,13 +136,6 @@ const sendQuestion = async (token, userId) => {
   const message =
     texts[0] === "" ? [] : texts.map((text) => ({ type: "text", text }));
 
-  if (stage > 1) {
-
-    // TODO: tips/trivia unshift
-    message.unshift({ type: "text", text: "正解です！" });
-
-  }
-
   if (question.picture) {
     const originalPath = path.join(
       path.resolve(),　// "./"
@@ -223,10 +216,9 @@ async function handleEvent(event) {
       const { data: gameData } = await getUserCurrentGame(event.source.userId);
 
       // START!
-      if (data === "ゲーム開始") {
-        if (gameData.progress.length > 1)
-          return replyText(replyToken, [`Game started`]);
-        await proceedNextStage(event.source.userId);
+      if (data === "KR4TNHBEG84279-3") {
+        if (gameData.progress.length === 1)
+          await proceedNextStage(event.source.userId);
         return sendQuestion(event.replyToken, event.source.userId);
       }
 
@@ -322,7 +314,7 @@ async function handleText(message, replyToken, source) {
 
     // menu_stage 以外　
     switch (message.text) {
-      case "詳しく教えてください。":
+      case "詳しく教えてください":
         return replyText(replyToken, [
           `(必要であれば、プレーヤーにゲームを説明してあげて)`,
         ]);
@@ -347,7 +339,7 @@ async function handleText(message, replyToken, source) {
         "ゲームを開始しました。",
       ]);
 
-    case "詳しく教えてください。":
+    case "詳しく教えてください":
       return replyText(replyToken, [
         `(必要であれば、プレーヤーにゲームを説明してあげて)`,
       ]);
@@ -369,7 +361,7 @@ async function handleText(message, replyToken, source) {
       }
 
       // ある時間がたってから
-      if (time_diff < 10000 * (usedHint + 1)) {
+      if (time_diff < 0 * (usedHint + 1)) {
         return replyText(replyToken, [
           `Please wait another ${Math.ceil(
             (10000 - time_diff) / 1000
@@ -377,7 +369,7 @@ async function handleText(message, replyToken, source) {
         ]);
       } else {
         useHint(key);
-        return replyText(replyToken, hints[usedHint]);
+        return replyText(replyToken, [hints[usedHint], "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。"]);
       }
 
     default:
@@ -402,7 +394,9 @@ async function handleText(message, replyToken, source) {
             );
           });
         } else {
-          return await sendQuestion(replyToken, source.userId);
+          const next_question = flex_messages.next_question;
+          next_question.body.contents[0].text = `Q${stage}`
+          return await sendFlexMessage(replyToken, next_question);
         }
       } else {
         updateWrong(key);

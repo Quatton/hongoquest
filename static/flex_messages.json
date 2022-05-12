@@ -450,7 +450,7 @@
             "action": {
               "type": "postback",
               "label": "START!",
-              "data": "ゲーム開始",
+              "data": "KR4TNHBEG84279-3"",
               "displayText": "START!"
             },
             "margin": "md"
@@ -544,6 +544,46 @@
         ],
         "flex": 0
       }
-    }
+    },
+    "next_question": {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Q3",
+        "size": "72px",
+        "align": "center",
+        "margin": "xxl"
+      },
+      {
+        "type": "separator",
+        "margin": "xxl",
+        "color": "#00000000"
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "md",
+        "action": {
+          "type": "postback",
+          "label": "次の問題を表示",
+          "data": "KR4TNHBEG84279-3",
+          "displayText": "問題 3 表示"
+        }
+      }
+    ],
+    "flex": 0
+  }
+}
   }
 }
