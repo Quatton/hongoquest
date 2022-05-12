@@ -52,6 +52,8 @@ function sendFlexMessage(
   flex_message,
   altText = "A flex message"
 ) {
+
+  // text message pattern
   const testMessage = {
     type: "flex",
     altText: altText,
@@ -88,10 +90,15 @@ app.post("/callback", line.middleware(config), (req, res) => {
     console.log("Destination User ID: " + req.body.destination);
   }
 
+  // req -> line middleware -> res
+
   // req.body.events should be an array of events
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end();
   }
+
+  // event.replyToken
+  // events = [event1, 2 ,3 ]
 
   // handle events separately
   Promise.all(req.body.events.map(handleEvent))
@@ -112,20 +119,28 @@ const replyText = (token, texts) => {
   );
 };
 
+
 const sendQuestion = async (token, userId) => {
+
+  // get gameData
   const { data: gameData } = await getUserCurrentGame(userId);
   const { progress, mode } = gameData;
+  // progress = [timestamp0, 1, 2]
   const stage = progress.length - 1;
   const question = questions[mode][stage];
+
   const texts = Array.isArray(question.question)
     ? question.question
     : [question.question];
+
   const message =
     texts[0] === "" ? [] : texts.map((text) => ({ type: "text", text }));
+
   if (stage > 1) message.unshift({ type: "text", text: "正解です！" });
+
   if (question.picture) {
     const originalPath = path.join(
-      path.resolve(),
+      path.resolve(),　// "./"
       "static/question_img",
       `${question.picture}.png`
     );
@@ -169,16 +184,6 @@ async function handleEvent(event) {
       switch (message.type) {
         case "text":
           return handleText(message, event.replyToken, event.source);
-        case "image":
-          return handleImage(message, event.replyToken);
-        case "video":
-          return handleVideo(message, event.replyToken);
-        case "audio":
-          return handleAudio(message, event.replyToken);
-        case "location":
-          return handleLocation(message, event.replyToken);
-        case "sticker":
-          return handleSticker(message, event.replyToken);
         default:
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
@@ -186,10 +191,10 @@ async function handleEvent(event) {
     case "follow":
       // Generate database
       getUserData(event.source.userId).catch((err) => {
-        client.getProfile(event.source.userId).then((profile) => {
+
           writeUserData(event.source.userId, {
             menu_stage: 0,
-          });
+
         });
       });
 
@@ -205,19 +210,14 @@ async function handleEvent(event) {
       removeUserData(event.source.userId);
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
-    case "join":
-      return replyText(event.replyToken, `Joined ${event.source.type}`);
-
-    case "leave":
-      return console.log(`Left: ${JSON.stringify(event)}`);
-
     case "postback":
+      //press button
       let data = event.postback.data;
-      if (data === "DATE" || data === "TIME" || data === "DATETIME") {
-        data += `(${JSON.stringify(event.postback.params)})`;
-      }
 
+      //get current_game
       const { data: gameData } = await getUserCurrentGame(event.source.userId);
+
+      // START!
       if (data === "ゲーム開始") {
         if (gameData.progress.length > 1)
           return replyText(replyToken, [`Game started`]);
@@ -226,9 +226,6 @@ async function handleEvent(event) {
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
-
-    case "beacon":
-      return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
@@ -243,9 +240,11 @@ async function handleText(message, replyToken, source) {
   const userData = await getUserData(source.userId);
   const { data } = userData;
 
+  // if no game then create a new game
   if (!data.current_game) {
     // データベースの存在を確認する
 
+    // menu_stage によって
     switch (data.menu_stage) {
       case 0:
         if (message.text === "ゲーム開始") {
@@ -316,6 +315,7 @@ async function handleText(message, replyToken, source) {
         }
     }
 
+    // menu_stage 以外　
     switch (message.text) {
       case "詳しく教えてください。":
         return replyText(replyToken, [
@@ -327,30 +327,28 @@ async function handleText(message, replyToken, source) {
         ]);
     }
   }
-
+  // current_game がある場合　今のゲームをゲットする
   const { data: gameData, key } = await getUserCurrentGame(source.userId);
   const stage = gameData.progress.length - 1;
   const mode = gameData.mode;
 
+  // mode, stageで questionDataをindexする
   const questionData = questions[mode][stage];
-  console.log(questionData.answer);
 
+  // current_gameがすでに存在する場合のメッセージ対応
   switch (message.text) {
     case "ゲーム開始":
       return replyText(replyToken, [
-        `(how do i tell them that they are in a game rn?)`,
+        "ゲームを開始しました。",
       ]);
 
-    case "START!":
-      console.log("it's counted");
-      return;
     case "詳しく教えてください。":
       return replyText(replyToken, [
         `(必要であれば、プレーヤーにゲームを説明してあげて)`,
       ]);
 
     case "再送":
-      return await sendQuestion(replyToken, stage);
+      return await sendQuestion(replyToken, source.userId);
 
     case "ヒント":
       const time_start = gameData.progress.at(-1);
@@ -362,8 +360,10 @@ async function handleText(message, replyToken, source) {
       const usedHint = gameData.hint.at(-1);
 
       if (usedHint >= hints.length) {
-        return replyText(replyToken, "もうないよ");
+        return replyText(replyToken, "ヒントは以上です！\nここからは自力で考えてみよう！");
       }
+
+      // ある時間がたってから
       if (time_diff < 10000 * (usedHint + 1)) {
         return replyText(replyToken, [
           `Please wait another ${Math.ceil(
@@ -402,156 +402,10 @@ async function handleText(message, replyToken, source) {
       } else {
         updateWrong(key);
         return await replyText(replyToken, [
-          "不正解です😢\nもう一度よく考えてみましょう！",
-
-          "答えが合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているか確認してみてください。",
+          "不正解です😢\nもう一度よく考えてみましょう!\n\n答えが合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているか確認してみてください。",
         ]);
       }
   }
-}
-
-function handleImage(message, replyToken) {
-  let getContent;
-  if (message.contentProvider.type === "line") {
-    const downloadPath = path.join(
-      path.resolve(),
-      "downloaded",
-      `${message.id}.jpg`
-    );
-    const previewPath = path.join(
-      path.resolve(),
-      "downloaded",
-      `${message.id}-preview.jpg`
-    );
-
-    getContent = downloadContent(message.id, downloadPath).then(
-      (downloadPath) => {
-        // ImageMagick is needed here to run 'convert'
-        // Please consider about security and performance by yourself
-        cp.execSync(
-          `convert -resize 240x jpeg:${downloadPath} jpeg:${previewPath}`
-        );
-
-        return {
-          originalContentUrl:
-            baseURL + "/downloaded/" + path.basename(downloadPath),
-          previewImageUrl:
-            baseURL + "/downloaded/" + path.basename(previewPath),
-        };
-      }
-    );
-  } else if (message.contentProvider.type === "external") {
-    getContent = Promise.resolve(message.contentProvider);
-  }
-
-  return getContent.then(({ originalContentUrl, previewImageUrl }) => {
-    return client.replyMessage(replyToken, {
-      type: "image",
-      originalContentUrl,
-      previewImageUrl,
-    });
-  });
-}
-
-function handleVideo(message, replyToken) {
-  let getContent;
-  if (message.contentProvider.type === "line") {
-    const downloadPath = path.join(
-      path.resolve(),
-      "downloaded",
-      `${message.id}.mp4`
-    );
-    const previewPath = path.join(
-      path.resolve(),
-      "downloaded",
-      `${message.id}-preview.jpg`
-    );
-
-    getContent = downloadContent(message.id, downloadPath).then(
-      (downloadPath) => {
-        // FFmpeg and ImageMagick is needed here to run 'convert'
-        // Please consider about security and performance by yourself
-        cp.execSync(`convert mp4:${downloadPath}[0] jpeg:${previewPath}`);
-
-        return {
-          originalContentUrl:
-            baseURL + "/downloaded/" + path.basename(downloadPath),
-          previewImageUrl:
-            baseURL + "/downloaded/" + path.basename(previewPath),
-        };
-      }
-    );
-  } else if (message.contentProvider.type === "external") {
-    getContent = Promise.resolve(message.contentProvider);
-  }
-
-  return getContent.then(({ originalContentUrl, previewImageUrl }) => {
-    return client.replyMessage(replyToken, {
-      type: "video",
-      originalContentUrl,
-      previewImageUrl,
-    });
-  });
-}
-
-function handleAudio(message, replyToken) {
-  let getContent;
-  if (message.contentProvider.type === "line") {
-    const downloadPath = path.join(
-      path.resolve(),
-      "downloaded",
-      `${message.id}.m4a`
-    );
-
-    getContent = downloadContent(message.id, downloadPath).then(
-      (downloadPath) => {
-        return {
-          originalContentUrl:
-            baseURL + "/downloaded/" + path.basename(downloadPath),
-        };
-      }
-    );
-  } else {
-    getContent = Promise.resolve(message.contentProvider);
-  }
-
-  return getContent.then(({ originalContentUrl }) => {
-    return client.replyMessage(replyToken, {
-      type: "audio",
-      originalContentUrl,
-      duration: message.duration,
-    });
-  });
-}
-
-function downloadContent(messageId, downloadPath) {
-  return client.getMessageContent(messageId).then(
-    (stream) =>
-      new Promise((resolve, reject) => {
-        const writable = fs.createWriteStream(downloadPath);
-        stream.pipe(writable);
-        stream.on("end", () => resolve(downloadPath));
-        stream.on("error", reject);
-      })
-  );
-}
-
-function handleLocation(message, replyToken) {
-  return client.replyMessage(replyToken, {
-    type: "location",
-    title: message.title,
-    address: message.address,
-    latitude: message.latitude,
-    longitude: message.longitude,
-  });
-}
-
-function handleSticker(message, replyToken) {
-  return client.replyMessage(replyToken, {
-    type: "sticker",
-    packageId: message.packageId,
-    stickerId: message.stickerId,
-  });
 }
 
 // listen on port
