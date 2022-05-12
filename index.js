@@ -411,7 +411,8 @@ async function handleText(message, replyToken, source) {
       } else {
         updateWrong(key);
         return await replyText(replyToken, [
-          "不正解です😢\nもう一度よく考えてみましょう!\n\n答えが合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているか確認してみてください。",
+          "不正解です😢\nもう一度よく考えてみましょう!",
+          "解答が合っていると思われるのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。"
         ]);
       }
   }
