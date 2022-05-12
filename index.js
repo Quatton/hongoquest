@@ -397,7 +397,7 @@ async function handleText(message, replyToken, source) {
             const { time, wrong } = data;
             const congrats = flex_messages.congrats;
             congrats.body.contents[0].text = time;
-            congrats.body.contents[1].text = `Wrong Answers: ${wrong}`;
+            congrats.body.contents[1].text = `間違えた数：${wrong}`;
             return sendFlexMessage(
               replyToken,
               congrats,
@@ -413,10 +413,12 @@ async function handleText(message, replyToken, source) {
           next_question.footer.contents[0].action.displayText = `問題を表示`;
 
           // last_stageだと、これが最後と表示すればいい？
-          // if (stage === questions[mode].length - 2) {
-          //   next_question.body.contents[0].color = "#DC3545";
-          //   next_question.footer.contents[0].action.label = "最後の問題を表示";
-          // }
+          // >> しておきます！
+
+          if (stage === questions[mode].length - 2) {
+             next_question.body.contents[0].color = "#DC3545";
+             next_question.footer.contents[0].action.label = "最後の問題を表示";
+           }
 
           const message = [
             { type: "text", text: "正解です！" },
@@ -433,7 +435,7 @@ async function handleText(message, replyToken, source) {
         updateWrong(key);
         return await replyText(replyToken, [
           "不正解です😢\nもう一度よく考えてみましょう!",
-          "解答が合っていると思われるのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。",
+          "解答が合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。",
         ]);
       }
   }
