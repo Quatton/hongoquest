@@ -131,26 +131,26 @@ const sendQuestion = async (token, userId) => {
 
     switch (mode) {
       case 0:
-        console.log("mode == 0")
         if (!userData.hardStart) {
           updateUserData(userId, {
             hardStart: progress[1]
           })
         }
+      break;
 
       case 1:
-        console.log("mode == 1")
         if (!userData.easyStart)
           {updateUserData(userId, {
             easyStart: progress[1]
           })}
+          break;
 
       case 2:
-        console.log("mode == 2")
         if (!userData.onlineStart)
           {updateUserData(userId, {
             onlineStart: progress[1]
           })}
+          break;
     }
   }
 
