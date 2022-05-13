@@ -334,7 +334,7 @@ async function handleText(message, replyToken, source) {
 
   // if no game then create a new game
   if (!userData.current_game) {
-    if (message.text === "admin test") {
+    if (message.text === "game_start_debug") {
       console.log("admin");
       return sendFlexMessage(replyToken, game_start, "ゲーム開始");
     }
@@ -480,7 +480,8 @@ async function handleText(message, replyToken, source) {
     default:
       if (
         questionData.answer.includes(message.text) ||
-        message.text === "12345678"
+        (message.text === "12345678" &&
+          Date.now() - new Date(2022, 4, 14, 0, 0).getTime() < 0)
       ) {
         await proceedNextStage(source.userId);
         if (stage === questions[mode].length - 1) {
