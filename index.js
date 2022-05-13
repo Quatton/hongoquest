@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import cp from "child_process";
 import ngrok from "ngrok";
-import axios from "axios"
+import axios from "axios";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -137,24 +137,26 @@ const sendQuestion = async (token, userId) => {
       case 0:
         if (!userData.hardStart) {
           updateUserData(userId, {
-            hardStart: progress[1]
-          })
+            hardStart: progress[1],
+          });
         }
-      break;
+        break;
 
       case 1:
-        if (!userData.easyStart)
-          {updateUserData(userId, {
-            easyStart: progress[1]
-          })}
-          break;
+        if (!userData.easyStart) {
+          updateUserData(userId, {
+            easyStart: progress[1],
+          });
+        }
+        break;
 
       case 2:
-        if (!userData.onlineStart)
-          {updateUserData(userId, {
-            onlineStart: progress[1]
-          })}
-          break;
+        if (!userData.onlineStart) {
+          updateUserData(userId, {
+            onlineStart: progress[1],
+          });
+        }
+        break;
     }
   }
 
@@ -222,13 +224,9 @@ async function handleEvent(event) {
           menu_stage: 0,
         });
       });
-      const eta_ms = new Date(2022, 5, 13, 25, 5).getTime()
+      const eta_ms = new Date(2022, 5, 13, 13, 40).getTime();
       if (Date.now() > eta_ms) {
-        return sendFlexMessage(
-          event.replyToken,
-          game_start,
-          "ゲーム開始"
-        );
+        return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
 
     case "unfollow":
@@ -266,24 +264,24 @@ async function handleEvent(event) {
         case "終了":
           await endGame(event.source.userId);
 
-          return sendFlexMessage(
-            event.replyToken,
-            game_start,
-            "ゲーム開始"
-          );
+          return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
         case "ゲーム開始":
-          const { data: userData} = await getUserData(source.userId);
+          const { data: userData } = await getUserData(source.userId);
 
           if (!userData.name) {
             proceedToMenu(source.userId);
             return replyText(replyToken, [
-              "あなたのニックネームを送信してください。", "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+              "あなたのニックネームを送信してください。",
+              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
             ]);
           } else {
             proceedToMenu(source.userId, 3);
-            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
+            return sendFlexMessage(
+              replyToken,
+              flex_messages.place,
+              "あなたはどちらからのご参加ですか？"
+            );
           }
-
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
@@ -298,17 +296,12 @@ async function handleText(message, replyToken, source) {
   if (!source.userId) return replyText(replyToken, "ユーザーIDが必要");
 
   // load the database
-  const { data: userData} = await getUserData(source.userId);
+  const { data: userData } = await getUserData(source.userId);
 
   // if no game then create a new game
   if (!userData.current_game) {
-    if (message.text = "admin test") {
-
-      return sendFlexMessage(
-        event.replyToken,
-        game_start,
-        "ゲーム開始"
-      );
+    if ((message.text = "admin test")) {
+      return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
     }
 
     // menu_stage によって
@@ -321,12 +314,20 @@ async function handleText(message, replyToken, source) {
         updateUserData(source.userId, {
           name: name,
         });
-        return sendFlexMessage(replyToken, nickname_confirm, "ニックネームは 「" + name + "」でよろしいですか？");
+        return sendFlexMessage(
+          replyToken,
+          nickname_confirm,
+          "ニックネームは 「" + name + "」でよろしいですか？"
+        );
       case 2:
         switch (message.text) {
           case "はい":
             proceedToMenu(source.userId);
-            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
+            return sendFlexMessage(
+              replyToken,
+              flex_messages.place,
+              "あなたはどちらからのご参加ですか？"
+            );
           case "入力し直す":
             proceedToMenu(source.userId, 1);
             return replyText(replyToken, [
@@ -341,11 +342,18 @@ async function handleText(message, replyToken, source) {
         switch (message.text) {
           case "キャンパス":
             proceedToMenu(source.userId);
-            return sendFlexMessage(replyToken, flex_messages.difficulty), "難易度をお選びください。";
+            return (
+              sendFlexMessage(replyToken, flex_messages.difficulty),
+              "難易度をお選びください。"
+            );
           case "オンライン":
             proceedToMenu(source.userId, 0);
             newGameData(source.userId, 2);
-            return sendFlexMessage(replyToken, flex_messages.start_confirm, "注意点");
+            return sendFlexMessage(
+              replyToken,
+              flex_messages.start_confirm,
+              "注意点"
+            );
           default:
             return replyText(replyToken, [
               "【キャンパス】か【オンライン】をお選びください。",
@@ -390,7 +398,11 @@ async function handleText(message, replyToken, source) {
       return replyText(replyToken, ["ゲームを開始しました。"]);
 
     case "終了":
-      return await sendFlexMessage(replyToken, flex_messages.shuryo, "終了しますか")
+      return await sendFlexMessage(
+        replyToken,
+        flex_messages.shuryo,
+        "終了しますか"
+      );
 
     case "ヒント":
       const time_start = gameData.progress.at(-1);
@@ -430,8 +442,6 @@ async function handleText(message, replyToken, source) {
         questionData.answer.includes(message.text) ||
         message.text === "12345678"
       ) {
-
-
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
@@ -461,9 +471,9 @@ async function handleText(message, replyToken, source) {
           // >> しておきます！
 
           if (stage === questions[mode].length - 2) {
-             next_question.body.contents[0].text = `最終問題`;
-             next_question.body.contents[0].size = `4xl`;
-           }
+            next_question.body.contents[0].text = `最終問題`;
+            next_question.body.contents[0].size = `4xl`;
+          }
 
           const message = [
             { type: "text", text: "正解です！" },
@@ -487,28 +497,18 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 5, 13, 13, 23).getTime() - Date.now();
+const eta_ms = new Date(2022, 5, 14, 9, 0).getTime() - Date.now();
 const timeout = setTimeout(() => {
-
-  const message = {message: [{
-    type: "flex",
-    contents: game_start,
-    altText: "ゲーム開始"
-  }]
-}
-
-  const url = "https://api.line.me/v2/bot/message/broadcast"
-  axios({
-    url: url,
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.CHANNEL_ACCESS_TOKEN}`
+  const message = [
+    {
+      type: "flex",
+      contents: game_start,
+      altText: "ゲーム開始",
     },
-    data: message
-  })
-}, eta_ms)
+  ];
 
+  client.broadcast(message);
+}, 10000);
 
 // listen on port
 const port = process.env.PORT || 3000;
