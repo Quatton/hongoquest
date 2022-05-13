@@ -245,18 +245,17 @@ async function handleText(message, replyToken, source) {
   if (!source.userId) return replyText(replyToken, "ユーザーIDが必要");
 
   // load the database
-  const userData = await getUserData(source.userId);
-  const { data } = userData;
+  const { data: userData} = await getUserData(source.userId);
 
   // if no game then create a new game
-  if (!data.current_game) {
+  if (!userData.current_game) {
     // データベースの存在を確認する
 
     // menu_stage によって
-    switch (data.menu_stage) {
+    switch (userData.menu_stage) {
       case 0:
         if (message.text === "ゲーム開始") {
-          if (!data.name) {
+          if (!userData.name) {
             proceedToMenu(source.userId);
             return replyText(replyToken, [
               "あなたのニックネームを送信してください。", "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
@@ -392,14 +391,14 @@ async function handleText(message, replyToken, source) {
         questionData.answer.includes(message.text) ||
         message.text === "12345678"
       ) {
-        //proceed to the next stagedownloaded
-        await proceedNextStage(source.userId);
+        
+
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
             const congrats = flex_messages.congrats;
             // nickname をどうにか取得して
-            // congrats.header.contents[0].text = nickname + " さん"
+            congrats.header.contents[0].text = userData.name + " さん";
             congrats.body.contents[0].text = time;
             congrats.body.contents[1].text = `間違えた数：${wrong}`;
             return sendFlexMessage(
