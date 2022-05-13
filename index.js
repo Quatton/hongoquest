@@ -508,6 +508,7 @@ async function handleText(message, replyToken, source) {
 
 //broadcastMessage
 const eta_ms = new Date(2022, 5, 13, 14, 0).getTime() - Date.now();
+console.log(eta_ms);
 setTimeout(() => {
   const message = [
     {
