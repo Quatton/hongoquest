@@ -392,7 +392,7 @@ async function handleText(message, replyToken, source) {
       return await sendQuestion(replyToken, source.userId);
 
     case "終了":
-      return await sendFlexMessage(replyToken, source.userId, "終了しますか")
+      return await sendFlexMessage(replyToken, flex_messages.shuryo, "終了しますか")
 
     case "ヒント":
       const time_start = gameData.progress.at(-1);
