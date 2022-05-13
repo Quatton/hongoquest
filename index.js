@@ -224,13 +224,14 @@ async function handleEvent(event) {
         });
       });
 
+      console.log(Date.now() - Date(2022, 5, 13, 14, 25));
       if (Date.now() - Date(2022, 5, 13, 14, 25) > 0) {
         return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
 
       const profile = await client.getProfile(event.source.userId);
       return replyText(event.replyToken, [
-        `${profile.displayName}さん\nはじめまして！HONGO QUEST officialです。\n東京大学理科一類29組の五月祭企画、「HONGO QUEST」に挑戦していただき、ありがとうございます！(moon grin)`,
+        `${profile.displayName}さん\nはじめまして！HONGO QUEST officialです。\n東京大学理科一類29組の五月祭企画、「HONGO QUEST」に挑戦していただき、ありがとうございます！`,
         "問題は五月祭当日の5/14(土)午前9:00から配信されます！お楽しみに✨✨",
         "質問などがあれば、なるべくTwitter、Instagramにてお願いします！\nhttps://twitter.com/hongoquest\nhttps://instagram.com/hongoquest",
       ]);
