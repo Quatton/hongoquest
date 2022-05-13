@@ -224,8 +224,8 @@ async function handleEvent(event) {
         });
       });
 
-      console.log(Date.now() - new Date(2022, 4, 13, 14, 45).getTime());
-      if (Date.now() - new Date(2022, 4, 13, 14, 45).getTime() > 0) {
+      console.log(Date.now() - new Date(2022, 4, 13, 5, 55).getTime());
+      if (Date.now() - new Date(2022, 4, 13, 5, 55).getTime() > 0) {
         return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
 
@@ -514,7 +514,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 13, 14, 47).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 13, 5, 55).getTime() - Date.now();
 console.log(eta_ms);
 if (eta_ms > 0)
   setTimeout(() => {
