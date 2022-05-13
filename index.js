@@ -483,8 +483,7 @@ async function handleText(message, replyToken, source) {
             return sendFlexMessage(
               replyToken,
               congrats,
-              `Congratulations! You completed the challenge in ${time} with ${wrong} wrong answer${
-                wrong > 1 ? "s" : ""
+              `全問クリアおめでとうございます。あなたのクリア時間はこちらです。""
               }`
             );
           });
@@ -527,7 +526,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 13, 10, 55).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 13, 11, 00).getTime() - Date.now();
 console.log(eta_ms);
 if (eta_ms > 0)
   setTimeout(() => {
@@ -541,12 +540,12 @@ if (eta_ms > 0)
     ];
 
     client.multicast(
-      (to = [
+      [
         "Ue4cfb98325de8f4e06b03c40f5498f08",
         "Ub21c98f9c03ba5c7e56072a082063aa0",
         "Ua9baf5491eedc15551b189f396749cc8",
         "Uc0031535d95ce837f61157a0f2cc3b89",
-      ]),
+      ],
       message
     );
     // client.broadcast(message);
