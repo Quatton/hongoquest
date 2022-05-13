@@ -491,11 +491,17 @@ async function handleText(message, replyToken, source) {
             congrats.header.contents[0].text = userData.name + " さん";
             congrats.body.contents[0].text = time;
             congrats.body.contents[1].text = `間違えた数：${wrong}`;
-            return sendFlexMessage(
-              replyToken,
-              congrats,
-              `全問クリアおめでとうございます。あなたのクリア時間はこちらです。`
-            );
+
+            const message = [
+              { type: "text", text: "正解です！" },
+              { type: "text", text: "【豆知識】" + questionData.tips },
+              {
+                type: "flex",
+                altText: `全問クリアおめでとうございます。あなたのクリア時間はこちらです。`,
+                contents: congrats,
+              },
+            ];
+            return client.replyMessage(replyToken, message);
           });
         } else {
           // ここにproceednextstage入れても動かなかった（泣）
