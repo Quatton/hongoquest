@@ -223,10 +223,11 @@ async function handleEvent(event) {
           menu_stage: 0,
         });
       });
-      const eta_ms = new Date(2022, 5, 13, 13, 50).getTime();
+      const eta_ms = new Date(2022, 5, 13, 13, 55).getTime();
       if (Date.now() > eta_ms) {
         return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
+      break;
 
     case "unfollow":
       removeUserData(event.source.userId);
@@ -310,7 +311,7 @@ async function handleText(message, replyToken, source) {
   // if no game then create a new game
   if (!userData.current_game) {
     if ((message.text = "admin test")) {
-      return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
+      return sendFlexMessage(replyToken, game_start, "ゲーム開始");
     }
 
     // menu_stage によって
@@ -506,7 +507,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 5, 14, 9, 0).getTime() - Date.now();
+const eta_ms = new Date(2022, 5, 13, 14, 0).getTime() - Date.now();
 const timeout = setTimeout(() => {
   const message = [
     {
@@ -517,7 +518,7 @@ const timeout = setTimeout(() => {
   ];
 
   client.broadcast(message);
-}, 10000);
+}, eta_ms);
 
 // listen on port
 const port = process.env.PORT || 3000;
