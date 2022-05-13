@@ -126,6 +126,27 @@ const sendQuestion = async (token, userId) => {
   const stage = progress.length - 1;
   const question = questions[mode][stage];
 
+  if (stage === 1) {
+    const { data: userData } = await getUserData(userId);
+    switch (mode) {
+      case 0:
+        if (!data.hardStart)
+          updateUserData(userId, {
+            hardStart: progress[1]
+          })
+      case 1:
+        if (!data.easyStart)
+          updateUserData(userId, {
+            easyStart: progress[1]
+          })
+      case 2:
+        if (!data.onlineStart)
+          updateUserData(userId, {
+            onlineStart: progress[1]
+          })
+    }
+  }
+
   const texts = Array.isArray(question.question)
     ? question.question
     : [question.question];
@@ -353,6 +374,9 @@ async function handleText(message, replyToken, source) {
     case "再送":
       return await sendQuestion(replyToken, source.userId);
 
+    case "終了":
+      return await endGame(source.userId)
+
     case "ヒント":
       const time_start = gameData.progress.at(-1);
       const time_diff = Date.now() - time_start;
@@ -391,7 +415,7 @@ async function handleText(message, replyToken, source) {
         questionData.answer.includes(message.text) ||
         message.text === "12345678"
       ) {
-        
+
 
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
