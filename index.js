@@ -130,17 +130,17 @@ const sendQuestion = async (token, userId) => {
     const { data: userData } = await getUserData(userId);
     switch (mode) {
       case 0:
-        if (!data.hardStart)
+        if (!userData.hardStart)
           updateUserData(userId, {
             hardStart: progress[1]
           })
       case 1:
-        if (!data.easyStart)
+        if (!userData.easyStart)
           updateUserData(userId, {
             easyStart: progress[1]
           })
       case 2:
-        if (!data.onlineStart)
+        if (!userData.onlineStart)
           updateUserData(userId, {
             onlineStart: progress[1]
           })
