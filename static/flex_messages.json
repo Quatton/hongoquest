@@ -692,6 +692,60 @@
         ],
         "flex": 0
       }
-    }
+    },
+    "shuryo": {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "この難易度を終了しても解答時間の計測は続行され、次にこの難易度をクリアするまでの時間が、この難易度のクリア時間となります。",
+        "wrap": true,
+        "size": "sm",
+        "margin": "md",
+        "color": "#DC3545",
+        "align": "center",
+        "weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": " 本当に終了しますか？",
+        "align": "center",
+        "margin": "md"
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "action": {
+          "type": "postback",
+          "label": "はい",
+          "data": "終了",
+          "displayText": "はい"
+        },
+        "style": "secondary"
+      },
+      {
+        "type": "button",
+        "style": "primary",
+        "action": {
+          "type": "postback",
+          "label": "いいえ",
+          "data": "いいえ",
+          "displayText": "いいえ"
+        },
+        "margin": "md"
+      }
+    ],
+    "flex": 0
+  }
+}
   }
 }

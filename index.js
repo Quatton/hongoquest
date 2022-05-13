@@ -126,26 +126,25 @@ const sendQuestion = async (token, userId) => {
   const stage = progress.length - 1;
   const question = questions[mode][stage];
 
-  console.log(mode)
   if (stage === 1) {
     const { data: userData } = await getUserData(userId);
     switch (mode) {
       case 0:
-        if (!userData.hardStart)
+        if (!userData.hardStart) {
           updateUserData(userId, {
             hardStart: progress[1]
           })
-
+        }
       case 1:
         if (!userData.easyStart)
-          updateUserData(userId, {
+          {updateUserData(userId, {
             easyStart: progress[1]
-          })
+          })}
       case 2:
         if (!userData.onlineStart)
-          updateUserData(userId, {
+          {updateUserData(userId, {
             onlineStart: progress[1]
-          })
+          })}
     }
   }
 
@@ -254,6 +253,16 @@ async function handleEvent(event) {
               { type: "flex", contents: next_question, altText: "問題を表示" },
             ]);
           }
+        case "終了":
+          await endGame(event.source.userId);
+
+          const game_start = flex_messages.game_start;
+          game_start.hero.url = `${baseURL}/static/logo.png`;
+          return sendFlexMessage(
+            event.replyToken,
+            game_start,
+            "Are you ready to start the game?"
+          );
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
@@ -377,7 +386,7 @@ async function handleText(message, replyToken, source) {
       return await sendQuestion(replyToken, source.userId);
 
     case "終了":
-      return await endGame(source.userId)
+      return await sendFlexMessage(replyToken, source.userId, "終了しますか")
 
     case "ヒント":
       const time_start = gameData.progress.at(-1);
