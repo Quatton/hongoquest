@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import cp from "child_process";
 import ngrok from "ngrok";
+import axios from "axios"
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -221,7 +222,7 @@ async function handleEvent(event) {
           menu_stage: 0,
         });
       });
-      const eta_ms = new Date(2022, 5, 13, 20, 5).getTime()
+      const eta_ms = new Date(2022, 5, 13, 25, 5).getTime()
       if (Date.now() > eta_ms) {
         return sendFlexMessage(
           event.replyToken,
@@ -486,7 +487,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 5, 13, 13, 20).getTime() - Date.now();
+const eta_ms = new Date(2022, 5, 13, 13, 23).getTime() - Date.now();
 const timeout = setTimeout(() => {
 
   const message = {message: [{
@@ -497,13 +498,14 @@ const timeout = setTimeout(() => {
 }
 
   const url = "https://api.line.me/v2/bot/message/broadcast"
-  fetch(url, {
-    method: 'POST',
+  axios({
+    url: url,
+    method: 'post',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${process.env.CHANNEL_ACCESS_TOKEN}`
     },
-    body: JSON.stringify(message)
+    data: message
   })
 }, eta_ms)
 
