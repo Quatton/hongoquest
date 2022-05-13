@@ -592,6 +592,234 @@
         ],
         "flex": 0
       }
+    },
+    "leaderboard": {
+      "type": "carousel",
+      "contents": [
+        {
+          "type": "bubble",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "難しい",
+                "align": "center",
+                "color": "#FFFFFF",
+                "size": "xl"
+              }
+            ],
+            "backgroundColor": "#06C755"
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "🏆",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "名前",
+                    "flex": 6,
+                    "align": "center",
+                    "weight": "bold"
+                  },
+                  {
+                    "type": "text",
+                    "text": "時間",
+                    "flex": 3,
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "spacing": "none"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "atom",
+                    "flex": 6,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "1:02:03",
+                    "flex": 3,
+                    "align": "center"
+                  }
+                ],
+                "backgroundColor": "#ECB40055"
+              }
+            ]
+          }
+        },
+        {
+          "type": "bubble",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "普通",
+                "align": "center",
+                "color": "#FFFFFF",
+                "size": "xl"
+              }
+            ],
+            "backgroundColor": "#06C755"
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "🏆",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "名前",
+                    "flex": 6,
+                    "align": "center",
+                    "weight": "bold"
+                  },
+                  {
+                    "type": "text",
+                    "text": "時間",
+                    "flex": 3,
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "spacing": "none"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "atom",
+                    "flex": 6,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "1:02:03",
+                    "flex": 3,
+                    "align": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "bubble",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "オンライン",
+                "align": "center",
+                "color": "#FFFFFF",
+                "size": "xl"
+              }
+            ],
+            "backgroundColor": "#06C755"
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "🏆",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "名前",
+                    "flex": 6,
+                    "align": "center",
+                    "weight": "bold"
+                  },
+                  {
+                    "type": "text",
+                    "text": "時間",
+                    "flex": 3,
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "spacing": "none"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "flex": 1,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "atom",
+                    "flex": 6,
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "1:02:03",
+                    "flex": 3,
+                    "align": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     }
   }
 }
