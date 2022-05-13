@@ -6,12 +6,8 @@
         "type": "image",
         "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
         "size": "full",
-        "aspectRatio": "20:13",
-        "aspectMode": "cover",
-        "action": {
-          "type": "uri",
-          "uri": "http://linecorp.com/"
-        }
+        "aspectRatio": "2:1",
+        "aspectMode": "cover"
       },
       "body": {
         "type": "box",
