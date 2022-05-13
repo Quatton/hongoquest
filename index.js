@@ -6,7 +6,6 @@ import fs from "fs";
 import path from "path";
 import cp from "child_process";
 import ngrok from "ngrok";
-import axios from "axios";
 
 import dotenv from "dotenv";
 dotenv.config();
