@@ -128,11 +128,12 @@ const sendQuestion = async (token, userId) => {
 
   if (stage === 1) {
     const { data: userData } = await getUserData(userId);
+
     switch (mode) {
       case 0:
         if (!userData.hardStart) {
           updateUserData(userId, {
-            hardStart: progress[1]
+            hardStart: 1
           })
         }
       case 1:
