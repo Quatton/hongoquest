@@ -305,7 +305,8 @@ async function handleEvent(event) {
           }
       }
 
-      return replyText(event.replyToken, `Got postback: ${data}`);
+      return;
+    // return replyText(event.replyToken, `Got postback: ${data}`);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
@@ -470,7 +471,7 @@ async function handleText(message, replyToken, source) {
         questionData.answer.includes(message.text) ||
         message.text === "12345678"
       ) {
-        await proceedNextStage(event.source.userId);
+        await proceedNextStage(source.userId);
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
@@ -526,7 +527,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 13, 10, 45).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 13, 10, 55).getTime() - Date.now();
 console.log(eta_ms);
 if (eta_ms > 0)
   setTimeout(() => {
@@ -535,7 +536,7 @@ if (eta_ms > 0)
         type: "flex",
         contents: game_start,
         altText:
-          "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
+          "本日は、理科一類1年29組🇩🇪の五月祭企画、HONGO QUESTへのご参加ありがとうございます！",
       },
     ];
 
