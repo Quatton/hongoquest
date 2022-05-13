@@ -43,6 +43,9 @@ const app = express();
 // questions related imports
 import { questions, flex_messages } from "./lib/questions.js";
 
+const game_start = flex_messages.game_start;
+game_start.hero.url = `${baseURL}/static/logo.png`;
+
 // serve static and downloaded files
 app.use("/static", express.static("static"));
 app.use("/downloaded", express.static("downloaded"));
@@ -218,14 +221,14 @@ async function handleEvent(event) {
           menu_stage: 0,
         });
       });
-
-      const game_start = flex_messages.game_start;
-      game_start.hero.url = `${baseURL}/static/logo.png`;
-      return sendFlexMessage(
-        event.replyToken,
-        game_start,
-        "ゲーム開始"
-      );
+      const eta_ms = new Date(2022, 5, 13, 13, 5).getTime()
+      if (Date.now() > eta_ms {
+        return sendFlexMessage(
+          event.replyToken,
+          game_start,
+          "ゲーム開始"
+        );
+      }
 
     case "unfollow":
       removeUserData(event.source.userId);
@@ -262,13 +265,24 @@ async function handleEvent(event) {
         case "終了":
           await endGame(event.source.userId);
 
-          const game_start = flex_messages.game_start;
-          game_start.hero.url = `${baseURL}/static/logo.png`;
           return sendFlexMessage(
             event.replyToken,
             game_start,
             "ゲーム開始"
           );
+        case "ゲーム開始":
+          const { data: userData} = await getUserData(source.userId);
+
+          if (!userData.name) {
+            proceedToMenu(source.userId);
+            return replyText(replyToken, [
+              "あなたのニックネームを送信してください。", "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+            ]);
+          } else {
+            proceedToMenu(source.userId, 3);
+            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
+          }
+
       }
 
       return replyText(event.replyToken, `Got postback: ${data}`);
@@ -287,23 +301,17 @@ async function handleText(message, replyToken, source) {
 
   // if no game then create a new game
   if (!userData.current_game) {
-    // データベースの存在を確認する
+    if (message.text = "admin test") {
+
+      return sendFlexMessage(
+        event.replyToken,
+        game_start,
+        "ゲーム開始"
+      );
+    }
 
     // menu_stage によって
     switch (userData.menu_stage) {
-      case 0:
-        if (message.text === "ゲーム開始") {
-          if (!userData.name) {
-            proceedToMenu(source.userId);
-            return replyText(replyToken, [
-              "あなたのニックネームを送信してください。", "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
-            ]);
-          } else {
-            proceedToMenu(source.userId, 3);
-            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
-          }
-        }
-      break;
       case 1:
         const nickname_confirm = flex_messages.nickname;
         const name = message.text.slice(0, 32);
@@ -476,6 +484,17 @@ async function handleText(message, replyToken, source) {
       }
   }
 }
+
+//broadcastMessage
+const eta_ms = new Date(2022, 5, 13, 13, 5).getTime() - Date.now();
+const timeout = setTimeout(() => {
+  client.broadcastMessage({
+    type: "flex",
+    contents: game_start,
+    altText: "ゲーム開始"
+  })
+}, eta_ms)
+
 
 // listen on port
 const port = process.env.PORT || 3000;
