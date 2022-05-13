@@ -22,7 +22,7 @@ import {
   proceedToMenu,
   updateUserData,
   useHint,
-  loadUserLeaderboard,
+  getLeaderBoardContents,
 } from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
@@ -314,34 +314,6 @@ async function handleEvent(event) {
   }
 }
 
-function leaderBoardMap(entry, userId) {
-  return {
-    type: "box",
-    layout: "horizontal",
-    contents: [
-      {
-        type: "text",
-        text: toString(entry[1].rank),
-        flex: 1,
-        align: "center",
-      },
-      {
-        type: "text",
-        text: entry[1].name,
-        flex: 6,
-        align: "center",
-      },
-      {
-        type: "text",
-        text: entry[1].parsed,
-        flex: 3,
-        align: "center",
-      },
-    ],
-    backgroundColor: entry[0] === userId ? "#00000000" : "#ECB40055",
-  };
-}
-
 async function handleText(message, replyToken, source) {
   // userId が必要。常時は問題ないはず。
   if (!source.userId) return replyText(replyToken, "ユーザーIDが必要");
@@ -350,24 +322,12 @@ async function handleText(message, replyToken, source) {
   const { data: userData } = await getUserData(source.userId);
 
   if (message.text === "ランキング") {
-    const leaderboard = loadUserLeaderboard(source.userId);
-    const hard = Object.entries(leaderboard.hard).map((e) => {
-      return leaderBoardMap(e, source.userId);
-    });
-    const easy = Object.entries(leaderboard.easy).map((e) => {
-      return leaderBoardMap(e, source.userId);
-    });
-    const online = Object.entries(leaderboard.online).map((e) => {
-      return leaderBoardMap(e, source.userId);
-    });
+    const contents = await getLeaderBoardContents(source.userId);
 
     const leaderboardCard = flex_messages.leaderboard;
-    leaderboardCard.contents[0].body.contents =
-      leaderboardCard.contents[0].body.contents[0] + hard;
-    leaderboardCard.contents[1].body.contents =
-      leaderboardCard.contents[1].body.contents[1] + easy;
-    leaderboardCard.contents[2].body.contents =
-      leaderboardCard.contents[2].body.contents[2] + online;
+    leaderboardCard.contents[0].body.contents = contents.hard;
+    leaderboardCard.contents[1].body.contents = contents.easy;
+    leaderboardCard.contents[2].body.contents = contents.online;
 
     return sendFlexMessage(replyToken, leaderboardCard, "ランキング");
   }
