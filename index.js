@@ -249,7 +249,9 @@ async function handleEvent(event) {
       const { data: userData } = await getUserData(event.source.userId);
 
       if (userData.current_game) {
-        const gameData = await getUserCurrentGame(event.source.userId).data;
+        const { data: gameData } = await getUserCurrentGame(
+          event.source.userId
+        );
 
         // START!
         switch (data) {
@@ -406,9 +408,7 @@ async function handleText(message, replyToken, source) {
         } else {
           return replyText(replyToken, [
             `問題は五月祭当日の5/14(土)午前9:00から配信されます！お楽しみに✨✨`,
-            `質問などがあれば、なるべくTwitter、Instagramにてお願いします！
-            https://twitter.com/hongoquest
-            https://instagram.com/hongoquest`,
+            `質問などがあれば、なるべくTwitter、Instagramにてお願いします！\nhttps://twitter.com/hongoquest\nhttps://instagram.com/hongoquest`,
           ]);
         }
     }
