@@ -22,6 +22,7 @@ import {
   proceedToMenu,
   updateUserData,
   useHint,
+  loadUserLeaderboard,
 } from "./lib/firebase.js";
 
 // create LINE SDK config from env variables
