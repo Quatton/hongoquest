@@ -319,7 +319,7 @@ async function handleText(message, replyToken, source) {
 
   // if no game then create a new game
   if (!userData.current_game) {
-    if ((message.text = "admin test")) {
+    if (message.text === "admin test") {
       console.log("admin");
       return sendFlexMessage(replyToken, game_start, "ゲーム開始");
     }
