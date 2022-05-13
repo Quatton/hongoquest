@@ -282,7 +282,7 @@ async function handleEvent(event) {
         }
       }
       switch (data) {
-        case "NPEGFPWPNGEINKF":
+        case "ゲーム開始":
           const { data: userData } = await getUserData(source.userId);
 
           if (!userData.name) {

@@ -63,7 +63,7 @@
             "action": {
               "type": "postback",
               "label": "ゲーム開始",
-              "data": "NPEGFPWPNGEINKF",
+              "data": "ゲーム開始",
               "displayText": "ゲーム開始"
             },
             "style": "primary"
