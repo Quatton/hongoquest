@@ -483,8 +483,7 @@ async function handleText(message, replyToken, source) {
             return sendFlexMessage(
               replyToken,
               congrats,
-              `全問クリアおめでとうございます。あなたのクリア時間はこちらです。""
-              }`
+              `全問クリアおめでとうございます。あなたのクリア時間はこちらです。`
             );
           });
         } else {
@@ -526,8 +525,8 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-console.log(new Date(2022, 4, 13, 11, 5).getTime() - Date.now());
-const eta_ms = new Date(2022, 4, 13, 11, 5).getTime() - Date.now();
+console.log(new Date(2022, 4, 13, 11, 15).getTime() - Date.now());
+const eta_ms = new Date(2022, 4, 13, 11, 15).getTime() - Date.now();
 
 if (eta_ms > 0)
   setTimeout(() => {
