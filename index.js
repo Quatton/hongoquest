@@ -399,10 +399,18 @@ async function handleText(message, replyToken, source) {
     // menu_stage 以外
     switch (message.text) {
       default:
-        return replyText(replyToken, [
-          `「ゲーム開始」のボタンを押してください。`,
-        ]);
-        break;
+        if (Date.now() - new Date(2022, 4, 14, 0, 0).getTime() > 0) {
+          return replyText(replyToken, [
+            `「ゲーム開始」のボタンを押してください。`,
+          ]);
+        } else {
+          return replyText(replyToken, [
+            `問題は五月祭当日の5/14(土)午前9:00から配信されます！お楽しみに✨✨`,
+            `質問などがあれば、なるべくTwitter、Instagramにてお願いします！
+            https://twitter.com/hongoquest
+            https://instagram.com/hongoquest`,
+          ]);
+        }
     }
   }
   // current_game がある場合　今のゲームをゲットする
