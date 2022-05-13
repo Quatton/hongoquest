@@ -224,7 +224,7 @@ async function handleEvent(event) {
       return sendFlexMessage(
         event.replyToken,
         game_start,
-        "Are you ready to start the game?"
+        "ゲーム開始"
       );
 
     case "unfollow":
@@ -267,7 +267,7 @@ async function handleEvent(event) {
           return sendFlexMessage(
             event.replyToken,
             game_start,
-            "Are you ready to start the game?"
+            "ゲーム開始"
           );
       }
 
@@ -300,9 +300,10 @@ async function handleText(message, replyToken, source) {
             ]);
           } else {
             proceedToMenu(source.userId, 3);
-            return sendFlexMessage(replyToken, flex_messages.place);
+            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
           }
         }
+      break;
       case 1:
         const nickname_confirm = flex_messages.nickname;
         const name = message.text.slice(0, 32);
@@ -311,12 +312,12 @@ async function handleText(message, replyToken, source) {
         updateUserData(source.userId, {
           name: name,
         });
-        return sendFlexMessage(replyToken, nickname_confirm);
+        return sendFlexMessage(replyToken, nickname_confirm, "ニックネームは 「" + name + "」でよろしいですか？");
       case 2:
         switch (message.text) {
           case "はい":
             proceedToMenu(source.userId);
-            return sendFlexMessage(replyToken, flex_messages.place);
+            return sendFlexMessage(replyToken, flex_messages.place, "あなたはどちらからのご参加ですか？");
           case "入力し直す":
             proceedToMenu(source.userId, 1);
             return replyText(replyToken, [
@@ -331,11 +332,11 @@ async function handleText(message, replyToken, source) {
         switch (message.text) {
           case "キャンパス":
             proceedToMenu(source.userId);
-            return sendFlexMessage(replyToken, flex_messages.difficulty);
+            return sendFlexMessage(replyToken, flex_messages.difficulty), "難易度をお選びください。";
           case "オンライン":
             proceedToMenu(source.userId, 0);
             newGameData(source.userId, 2);
-            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm, "注意点");
           default:
             return replyText(replyToken, [
               "【キャンパス】か【オンライン】をお選びください。",
@@ -360,13 +361,9 @@ async function handleText(message, replyToken, source) {
 
     // menu_stage 以外
     switch (message.text) {
-      case "詳しく教えてください":
-        return replyText(replyToken, [
-          `(必要であれば、プレーヤーにゲームを説明してあげて)`,
-        ]);
       default:
         return replyText(replyToken, [
-          `(tell them to say whether "ゲーム開始" or if you're not sure about the game ask 詳しく教えてください。)`,
+          `「ゲーム開始」のボタンを押してください。`,
         ]);
     }
   }
@@ -382,14 +379,6 @@ async function handleText(message, replyToken, source) {
   switch (message.text) {
     case "ゲーム開始":
       return replyText(replyToken, ["ゲームを開始しました。"]);
-
-    case "詳しく教えてください":
-      return replyText(replyToken, [
-        `(必要であれば、プレーヤーにゲームを説明してあげて)`,
-      ]);
-
-    case "再送":
-      return await sendQuestion(replyToken, source.userId);
 
     case "終了":
       return await sendFlexMessage(replyToken, flex_messages.shuryo, "終了しますか")
