@@ -44,7 +44,7 @@ const app = express();
 import { questions, flex_messages } from "./lib/questions.js";
 
 const game_start = flex_messages.game_start;
-game_start.hero.url = `${baseURL}/static/logo.png`;
+game_start.hero.url = `${baseURL}/static/logo.jpg`;
 
 // serve static and downloaded files
 app.use("/static", express.static("static"));
@@ -258,12 +258,12 @@ async function handleEvent(event) {
           case "KR4TNHBEG84279-3":
             // 問題をまた表示するとき、next stageに進むとは限らない？
             // 違うどこかにproceednextstageがあるはず
-            await proceedNextStage(event.source.userId);
+
             return sendQuestion(event.replyToken, event.source.userId);
           case "FEIUQEGFQUEIFQGF":
             if (gameData.progress.length === 1) {
               const next_question = flex_messages.next_question;
-
+              await proceedNextStage(event.source.userId);
               next_question.body.contents[0].text = `Q1`;
               next_question.footer.contents[0].action.displayText = `問題を表示`;
               return client.replyMessage(event.replyToken, [
@@ -290,7 +290,7 @@ async function handleEvent(event) {
           const { data: userData } = await getUserData(event.source.userId);
 
           if (!userData.name) {
-            proceedToMenu(event.source.userId);
+            proceedToMenu(event.source.userId, 1);
             return replyText(event.replyToken, [
               "あなたのニックネームを送信してください。",
               "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
@@ -330,7 +330,7 @@ async function handleText(message, replyToken, source) {
     switch (userData.menu_stage) {
       case 1:
         const nickname_confirm = flex_messages.nickname;
-        const name = message.text.slice(0, 32);
+        const name = message.text.slice(0, 16);
         nickname_confirm.body.contents[1].text = name;
         proceedToMenu(source.userId);
         updateUserData(source.userId, {
@@ -425,14 +425,12 @@ async function handleText(message, replyToken, source) {
   switch (message.text) {
     case "ゲーム開始":
       return replyText(replyToken, ["ゲームを開始しました。"]);
-      break;
     case "終了":
       return await sendFlexMessage(
         replyToken,
         flex_messages.shuryo,
         "終了しますか"
       );
-      break;
     case "ヒント":
       const time_start = gameData.progress.at(-1);
       const time_diff = Date.now() - time_start;
@@ -472,6 +470,7 @@ async function handleText(message, replyToken, source) {
         questionData.answer.includes(message.text) ||
         message.text === "12345678"
       ) {
+        await proceedNextStage(event.source.userId);
         if (stage === questions[mode].length - 1) {
           endGame(source.userId).then((data) => {
             const { time, wrong } = data;
@@ -507,7 +506,7 @@ async function handleText(message, replyToken, source) {
 
           const message = [
             { type: "text", text: "正解です！" },
-            { type: "text", text: questionData.tips },
+            { type: "text", text: "【豆知識】" + questionData.tips },
             {
               type: "flex",
               altText: "問題を表示",
@@ -527,18 +526,29 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 14, 0, 0).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 13, 10, 45).getTime() - Date.now();
+console.log(eta_ms);
 if (eta_ms > 0)
   setTimeout(() => {
     const message = [
       {
         type: "flex",
         contents: game_start,
-        altText: "ゲーム開始",
+        altText:
+          "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
       },
     ];
 
-    client.broadcast(message);
+    client.multicast(
+      (to = [
+        "Ue4cfb98325de8f4e06b03c40f5498f08",
+        "Ub21c98f9c03ba5c7e56072a082063aa0",
+        "Ua9baf5491eedc15551b189f396749cc8",
+        "Uc0031535d95ce837f61157a0f2cc3b89",
+      ]),
+      message
+    );
+    // client.broadcast(message);
   }, eta_ms);
 
 // listen on port
