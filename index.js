@@ -221,7 +221,7 @@ async function handleEvent(event) {
           menu_stage: 0,
         });
       });
-      const eta_ms = new Date(2022, 5, 13, 13, 5).getTime()
+      const eta_ms = new Date(2022, 5, 13, 20, 5).getTime()
       if (Date.now() > eta_ms) {
         return sendFlexMessage(
           event.replyToken,
@@ -486,12 +486,24 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 5, 13, 13, 5).getTime() - Date.now();
+const eta_ms = new Date(2022, 5, 13, 13, 20).getTime() - Date.now();
 const timeout = setTimeout(() => {
-  client.broadcastMessage({
+
+  const message = {message: [{
     type: "flex",
     contents: game_start,
     altText: "ゲーム開始"
+  }]
+}
+
+  const url = "https://api.line.me/v2/bot/message/broadcast"
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.CHANNEL_ACCESS_TOKEN}`
+    },
+    body: JSON.stringify(message)
   })
 }, eta_ms)
 
