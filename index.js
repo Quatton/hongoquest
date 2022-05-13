@@ -508,7 +508,7 @@ async function handleText(message, replyToken, source) {
 
 //broadcastMessage
 const eta_ms = new Date(2022, 5, 13, 14, 0).getTime() - Date.now();
-const timeout = setTimeout(() => {
+setTimeout(() => {
   const message = [
     {
       type: "flex",
