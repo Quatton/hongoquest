@@ -134,7 +134,7 @@ const sendQuestion = async (token, userId) => {
         console.log("mode == 0")
         if (!userData.hardStart) {
           updateUserData(userId, {
-            hardStart: int(progress[1]
+            hardStart: progress[1]
           })
         }
 
