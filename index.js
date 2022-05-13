@@ -526,8 +526,8 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-console.log(new Date(2022, 4, 13, 11, 00).getTime() - Date.now());
-const eta_ms = new Date(2022, 4, 13, 11, 00).getTime() - Date.now();
+console.log(new Date(2022, 4, 13, 11, 5).getTime() - Date.now());
+const eta_ms = new Date(2022, 4, 13, 11, 5).getTime() - Date.now();
 
 if (eta_ms > 0)
   setTimeout(() => {
