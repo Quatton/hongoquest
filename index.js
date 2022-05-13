@@ -126,6 +126,7 @@ const sendQuestion = async (token, userId) => {
   const stage = progress.length - 1;
   const question = questions[mode][stage];
 
+  console.log(mode)
   if (stage === 1) {
     const { data: userData } = await getUserData(userId);
     switch (mode) {
@@ -134,6 +135,7 @@ const sendQuestion = async (token, userId) => {
           updateUserData(userId, {
             hardStart: progress[1]
           })
+
       case 1:
         if (!userData.easyStart)
           updateUserData(userId, {
