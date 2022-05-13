@@ -222,7 +222,7 @@ async function handleEvent(event) {
         });
       });
       const eta_ms = new Date(2022, 5, 13, 13, 5).getTime()
-      if (Date.now() > eta_ms {
+      if (Date.now() > eta_ms) {
         return sendFlexMessage(
           event.replyToken,
           game_start,
