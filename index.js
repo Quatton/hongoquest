@@ -274,6 +274,7 @@ async function handleEvent(event) {
                 },
               ]);
             }
+            break;
           case "終了":
             await endGame(event.source.userId);
 
@@ -281,7 +282,7 @@ async function handleEvent(event) {
         }
       }
       switch (data) {
-        case "ゲーム開始":
+        case "NPEGFPWPNGEINKF":
           const { data: userData } = await getUserData(source.userId);
 
           if (!userData.name) {

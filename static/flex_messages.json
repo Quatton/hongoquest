@@ -1,77 +1,77 @@
 {
   "flex_messages": {
     "game_start": {
-  "type": "bubble",
-  "hero": {
-    "type": "image",
-    "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
-    "size": "full",
-    "aspectRatio": "20:13",
-    "aspectMode": "cover",
-    "action": {
-      "type": "uri",
-      "uri": "http://linecorp.com/"
-    }
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "align": "center",
-        "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
-        "wrap": true,
-        "size": "md",
-        "margin": "none"
-      },
-      {
-        "type": "separator",
-        "margin": "lg",
-        "color": "#808080"
-      },
-      {
-        "type": "text",
-        "align": "center",
-        "text": "HONGO QUESTは、謎を解きながら\n東大について知ることができる\n企画となっており、キャンパスと\nオンラインの両方から\n参加が可能となっています。",
-        "size": "md",
-        "wrap": true,
-        "margin": "lg"
-      },
-      {
-        "type": "separator",
-        "margin": "lg",
-        "color": "#808080"
-      },
-      {
-        "type": "text",
-        "align": "center",
-        "text": "後日、クリア時間や正答率に応じた\nランキング発表も行う予定です👑\nお楽しみに！",
-        "wrap": true,
-        "size": "md",
-        "margin": "lg"
-      }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "spacing": "sm",
-    "contents": [
-      {
-        "type": "button",
+      "type": "bubble",
+      "hero": {
+        "type": "image",
+        "url": "https://via.placeholder.com/600x400/EBC400/969696.png?text=HONGO+QUEST+LOGO",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
         "action": {
-          "type": "postback",
-          "label": "ゲーム開始",
-          "data": "ゲーム開始",
-          "displayText": "ゲーム開始"
-        },
-        "style": "primary"
+          "type": "uri",
+          "uri": "http://linecorp.com/"
+        }
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "align": "center",
+            "text": "本日は、理科一類1年29組🇩🇪の\n五月祭企画、HONGO QUESTへの\nご参加ありがとうございます！",
+            "wrap": true,
+            "size": "md",
+            "margin": "none"
+          },
+          {
+            "type": "separator",
+            "margin": "lg",
+            "color": "#808080"
+          },
+          {
+            "type": "text",
+            "align": "center",
+            "text": "HONGO QUESTは、謎を解きながら\n東大について知ることができる\n企画となっており、キャンパスと\nオンラインの両方から\n参加が可能となっています。",
+            "size": "md",
+            "wrap": true,
+            "margin": "lg"
+          },
+          {
+            "type": "separator",
+            "margin": "lg",
+            "color": "#808080"
+          },
+          {
+            "type": "text",
+            "align": "center",
+            "text": "後日、クリア時間や正答率に応じた\nランキング発表も行う予定です👑\nお楽しみに！",
+            "wrap": true,
+            "size": "md",
+            "margin": "lg"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "ゲーム開始",
+              "data": "NPEGFPWPNGEINKF",
+              "displayText": "ゲーム開始"
+            },
+            "style": "primary"
+          }
+        ],
+        "flex": 0
       }
-    ],
-    "flex": 0
-  }
-},
+    },
     "congrats": {
       "type": "bubble",
       "header": {
@@ -544,58 +544,58 @@
       }
     },
     "shuryo": {
-  "type": "bubble",
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "この難易度を終了しても解答時間の計測は続行され、次にこの難易度をクリアするまでの時間が、この難易度のクリア時間となります。",
-        "wrap": true,
-        "size": "sm",
-        "margin": "md",
-        "color": "#DC3545",
-        "align": "center",
-        "weight": "bold"
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "この難易度を終了しても解答時間の計測は続行され、次にこの難易度をクリアするまでの時間が、この難易度のクリア時間となります。",
+            "wrap": true,
+            "size": "sm",
+            "margin": "md",
+            "color": "#DC3545",
+            "align": "center",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": " 本当に終了しますか？",
+            "align": "center",
+            "margin": "md"
+          }
+        ]
       },
-      {
-        "type": "text",
-        "text": " 本当に終了しますか？",
-        "align": "center",
-        "margin": "md"
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "はい",
+              "data": "終了",
+              "displayText": "はい"
+            },
+            "style": "secondary"
+          },
+          {
+            "type": "button",
+            "style": "primary",
+            "action": {
+              "type": "postback",
+              "label": "いいえ",
+              "data": "いいえ",
+              "displayText": "いいえ"
+            },
+            "margin": "md"
+          }
+        ],
+        "flex": 0
       }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "spacing": "sm",
-    "contents": [
-      {
-        "type": "button",
-        "action": {
-          "type": "postback",
-          "label": "はい",
-          "data": "終了",
-          "displayText": "はい"
-        },
-        "style": "secondary"
-      },
-      {
-        "type": "button",
-        "style": "primary",
-        "action": {
-          "type": "postback",
-          "label": "いいえ",
-          "data": "いいえ",
-          "displayText": "いいえ"
-        },
-        "margin": "md"
-      }
-    ],
-    "flex": 0
-  }
-}
+    }
   }
 }
