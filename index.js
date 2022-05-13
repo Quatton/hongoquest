@@ -285,15 +285,15 @@ async function handleEvent(event) {
           const { data: userData } = await getUserData(source.userId);
 
           if (!userData.name) {
-            proceedToMenu(source.userId);
-            return replyText(replyToken, [
+            proceedToMenu(event.source.userId);
+            return replyText(event.replyToken, [
               "あなたのニックネームを送信してください。",
               "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
             ]);
           } else {
-            proceedToMenu(source.userId, 3);
+            proceedToMenu(event.source.userId, 3);
             return sendFlexMessage(
-              replyToken,
+              event.replyToken,
               flex_messages.place,
               "あなたはどちらからのご参加ですか？"
             );
