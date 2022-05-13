@@ -525,8 +525,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-console.log(new Date(2022, 4, 13, 11, 15).getTime() - Date.now());
-const eta_ms = new Date(2022, 4, 13, 11, 15).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 14, 0, 0).getTime() - Date.now();
 
 if (eta_ms > 0)
   setTimeout(() => {
@@ -539,16 +538,7 @@ if (eta_ms > 0)
       },
     ];
 
-    client.multicast(
-      [
-        "Ue4cfb98325de8f4e06b03c40f5498f08",
-        "Ub21c98f9c03ba5c7e56072a082063aa0",
-        "Ua9baf5491eedc15551b189f396749cc8",
-        "U7a4134167b8768b62a7773bb1034d010",
-      ],
-      message
-    );
-    // client.broadcast(message);
+    client.broadcast(message);
   }, eta_ms);
 
 // listen on port
