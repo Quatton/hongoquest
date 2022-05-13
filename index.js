@@ -215,6 +215,7 @@ async function handleEvent(event) {
         default:
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
+      break;
 
     case "follow":
       // Generate database
@@ -225,6 +226,7 @@ async function handleEvent(event) {
       });
 
       if (Date.now() - new Date(2022, 4, 14, 0, 0).getTime() > 0) {
+        console.log("follow");
         return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
 
@@ -277,13 +279,13 @@ async function handleEvent(event) {
             break;
           case "終了":
             await endGame(event.source.userId);
-
+            console.log("endgame");
             return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
         }
       }
       switch (data) {
         case "ゲーム開始":
-          const { data: userData } = await getUserData(source.userId);
+          const { data: userData } = await getUserData(event.source.userId);
 
           if (!userData.name) {
             proceedToMenu(event.source.userId);
@@ -318,6 +320,7 @@ async function handleText(message, replyToken, source) {
   // if no game then create a new game
   if (!userData.current_game) {
     if ((message.text = "admin test")) {
+      console.log("admin");
       return sendFlexMessage(replyToken, game_start, "ゲーム開始");
     }
 
@@ -399,6 +402,7 @@ async function handleText(message, replyToken, source) {
         return replyText(replyToken, [
           `「ゲーム開始」のボタンを押してください。`,
         ]);
+        break;
     }
   }
   // current_game がある場合　今のゲームをゲットする
@@ -413,14 +417,14 @@ async function handleText(message, replyToken, source) {
   switch (message.text) {
     case "ゲーム開始":
       return replyText(replyToken, ["ゲームを開始しました。"]);
-
+      break;
     case "終了":
       return await sendFlexMessage(
         replyToken,
         flex_messages.shuryo,
         "終了しますか"
       );
-
+      break;
     case "ヒント":
       const time_start = gameData.progress.at(-1);
       const time_diff = Date.now() - time_start;
@@ -453,6 +457,7 @@ async function handleText(message, replyToken, source) {
             : "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
         ]);
       }
+      break;
 
     default:
       if (
