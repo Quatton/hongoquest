@@ -277,8 +277,9 @@ async function handleEvent(event) {
           const texts = comments.map((text) => {
             return { type: "text", text };
           });
+          return await client.pushMessage(me, texts);
         }
-        return await client.pushMessage(me, texts);
+        return;
       }
 
       if (data === "ランキング") {
