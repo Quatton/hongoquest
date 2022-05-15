@@ -274,9 +274,11 @@ async function handleEvent(event) {
         const { data: userData } = await getUserData(event.source.userId);
         const { comments } = userData;
         if (comments.length > 0) {
+          const { displayName } = await client.getProfile(event.source.userId);
           const texts = comments.map((text) => {
-            return { type: "text", text };
+            return { type: "text", text: `${displayName}: ${text}` };
           });
+
           return await client.pushMessage(me, texts);
         }
         return;
