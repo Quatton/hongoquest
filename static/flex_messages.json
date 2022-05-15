@@ -968,7 +968,8 @@
             "action": {
               "type": "postback",
               "label": "送信",
-              "data": "send"
+              "data": "send",
+              "displayText": "送信"
             }
           }
         ],

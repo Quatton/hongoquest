@@ -254,7 +254,7 @@ async function handleEvent(event) {
       if (data === "comment") {
         await updateUserData(event.source.userId, {
           commenting: 1,
-          comment: [],
+          comments: [],
         });
         return sendFlexMessage(
           event.replyToken,
@@ -266,7 +266,7 @@ async function handleEvent(event) {
       if (data === "send") {
         await updateUserData(event.source.userId, {
           commenting: 0,
-          comment: [],
+          comments: [],
         });
         const { data: userData } = await getUserData(event.source.userId);
         const { comments } = userData;
@@ -613,7 +613,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 15, 11, 53).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 15, 11, 57).getTime() - Date.now();
 
 console.log(Math.floor(eta_ms / 60000));
 if (eta_ms > 0)
