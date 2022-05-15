@@ -820,6 +820,160 @@
           }
         }
       ]
+    },
+    "thankyou": {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "お疲れ様でした！",
+            "weight": "regular",
+            "size": "lg",
+            "align": "center",
+            "color": "#FFFFFF"
+          }
+        ],
+        "backgroundColor": "#06C755"
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "align": "center",
+            "text": "ご来場頂きありがとうございました！",
+            "wrap": true,
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": "キャンパス内を歩きながら謎解きは",
+            "wrap": true,
+            "align": "center",
+            "size": "sm",
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "text": "いかがでしたか。オンラインで参加する皆様は楽しかったでしょうか。",
+            "size": "sm",
+            "wrap": true,
+            "align": "center",
+            "action": {
+              "type": "postback",
+              "label": "ランキングを表示",
+              "data": "ランキング",
+              "displayText": "ランキング"
+            }
+          },
+          {
+            "type": "text",
+            "align": "center",
+            "text": "下のボタンを押すと",
+            "wrap": true,
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": "ランキングが表示されます！",
+            "align": "center",
+            "size": "sm"
+          },
+          {
+            "type": "separator",
+            "margin": "md",
+            "color": "#808080"
+          },
+          {
+            "type": "text",
+            "text": "ご意見等ございましたら、【コメント】を押し、ご自由にご記入ください。",
+            "size": "sm",
+            "align": "center",
+            "margin": "md",
+            "wrap": true
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "style": "primary",
+            "action": {
+              "type": "message",
+              "label": "ランキングを表示",
+              "text": "ランキング"
+            }
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "コメント",
+              "data": "comment",
+              "displayText": "コメント"
+            },
+            "style": "secondary",
+            "margin": "md"
+          }
+        ],
+        "flex": 0
+      }
+    },
+    "comment": {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "コメント",
+            "weight": "regular",
+            "size": "lg",
+            "align": "center",
+            "color": "#FFFFFF"
+          }
+        ],
+        "backgroundColor": "#06C755"
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "align": "center",
+            "text": "メッセージを書き終わったら【送信】ボタンを押してください。",
+            "wrap": true,
+            "size": "sm"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "style": "primary",
+            "action": {
+              "type": "postback",
+              "label": "送信",
+              "data": "send"
+            }
+          }
+        ],
+        "flex": 0
+      }
     }
   }
 }
