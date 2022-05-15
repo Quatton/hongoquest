@@ -267,18 +267,18 @@ async function handleEvent(event) {
         await updateUserData(event.source.userId, {
           commenting: 0,
         });
+        replyText(
+          event.source.replyToken,
+          "コメントをありがとうございました！"
+        );
         const { data: userData } = await getUserData(event.source.userId);
         const { comments } = userData;
         if (comments.length > 0) {
           const texts = comments.map((text) => {
             return { type: "text", text };
           });
-          await client.pushMessage(me, texts);
         }
-        return replyText(
-          event.source.replyToken,
-          "コメントをありがとうございました！"
-        );
+        return await client.pushMessage(me, texts);
       }
 
       if (data === "ランキング") {
@@ -394,7 +394,7 @@ async function handleText(message, replyToken, source) {
   if (userData.commenting) {
     const { comments } = userData;
     if (!comments) {
-      const newComments = [userData.commenting];
+      const newComments = [message.text];
       return await updateUserData(source.userId, {
         comments: newComments,
       });
