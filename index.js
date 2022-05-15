@@ -254,6 +254,7 @@ async function handleEvent(event) {
       if (data === "comment") {
         await updateUserData(event.source.userId, {
           commenting: 1,
+          comments: [],
         });
         return sendFlexMessage(
           event.replyToken,
