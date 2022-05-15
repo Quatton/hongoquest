@@ -873,6 +873,7 @@
           {
             "type": "text",
             "align": "center",
+            "margin": "md",
             "text": "下のボタンを押すと",
             "wrap": true,
             "size": "sm"

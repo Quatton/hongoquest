@@ -404,8 +404,6 @@ async function handleText(message, replyToken, source) {
         comments,
       });
     }
-
-    return;
   }
   if (new Date(2022, 4, 15, 12, 0).getTime() - Date.now() > 0) {
     if (!userData.current_game) {
@@ -635,8 +633,7 @@ if (eta_ms > 0)
     client.broadcast(message);
   }, eta_ms);
 
-//client.getProfile("Ud48651f857fc418b4448ad7568a6321b").then(console.log);
-
+client.getProfile("U19c8fe86dc0123c800a5fc8bf32564d2").then(console.log);
 // listen on port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
