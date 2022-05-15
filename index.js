@@ -267,10 +267,7 @@ async function handleEvent(event) {
         await updateUserData(event.source.userId, {
           commenting: 0,
         });
-        replyText(
-          event.source.replyToken,
-          "コメントをありがとうございました！"
-        );
+        replyText(event.replyToken, "コメントをありがとうございました！");
         const { data: userData } = await getUserData(event.source.userId);
         const { comments } = userData;
         if (comments.length > 0) {
