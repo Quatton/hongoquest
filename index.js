@@ -632,7 +632,7 @@ if (eta_ms > 0)
         altText: "ご来場ありがとうございました。",
       },
     ];
-    client.multicast([me], message);
+    client.broadcast(message);
   }, eta_ms);
 
 //client.getProfile("Ud48651f857fc418b4448ad7568a6321b").then(console.log);
