@@ -613,7 +613,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 15, 11, 52).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 15, 11, 53).getTime() - Date.now();
 
 console.log(Math.floor(eta_ms / 60000));
 if (eta_ms > 0)
