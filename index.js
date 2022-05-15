@@ -254,7 +254,6 @@ async function handleEvent(event) {
       if (data === "comment") {
         await updateUserData(event.source.userId, {
           commenting: 1,
-          comments: [],
         });
         return sendFlexMessage(
           event.replyToken,
@@ -266,7 +265,6 @@ async function handleEvent(event) {
       if (data === "send") {
         await updateUserData(event.source.userId, {
           commenting: 0,
-          comments: [],
         });
         const { data: userData } = await getUserData(event.source.userId);
         const { comments } = userData;
@@ -394,11 +392,19 @@ async function handleText(message, replyToken, source) {
 
   if (userData.commenting) {
     const { comments } = userData;
-    comments.push(message.text);
+    if (!comments) {
+      const newComments = [userData.commenting];
+      return await updateUserData(source.userId, {
+        comments: newComments,
+      });
+    } else {
+      comments.push(message.text);
+      return await updateUserData(source.userId, {
+        comments,
+      });
+    }
 
-    await updateUserData(source.userId, {
-      comments,
-    });
+    return;
   }
   if (new Date(2022, 4, 15, 12, 0).getTime() - Date.now() > 0) {
     if (!userData.current_game) {
@@ -613,7 +619,7 @@ async function handleText(message, replyToken, source) {
 }
 
 //broadcastMessage
-const eta_ms = new Date(2022, 4, 15, 11, 57).getTime() - Date.now();
+const eta_ms = new Date(2022, 4, 15, 12, 05).getTime() - Date.now();
 
 console.log(Math.floor(eta_ms / 60000));
 if (eta_ms > 0)
@@ -625,9 +631,10 @@ if (eta_ms > 0)
         altText: "ご来場ありがとうございました。",
       },
     ];
-
-    client.pushMessage(me, message);
+    client.multicast([me], message);
   }, eta_ms);
+
+//client.getProfile("Ud48651f857fc418b4448ad7568a6321b").then(console.log);
 
 // listen on port
 const port = process.env.PORT || 3000;
