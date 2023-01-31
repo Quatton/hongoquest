@@ -227,11 +227,7 @@ async function handleEvent(event) {
         });
       });
 
-      if (
-        new Date(2022, 4, 15, 9, 0).getTime() >
-        Date.now() >
-        new Date(2022, 4, 14, 0, 0).getTime()
-      ) {
+      if (Date.now() > new Date(2022, 4, 14, 0, 0).getTime()) {
         console.log("follow");
         return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
       }
@@ -300,71 +296,66 @@ async function handleEvent(event) {
         );
       }
 
-      if (new Date(2022, 4, 15, 9, 0).getTime() > Date.now()) {
-        //get current_game
-        const { data: userData } = await getUserData(event.source.userId);
+      //get current_game
+      const { data: userData } = await getUserData(event.source.userId);
 
-        if (userData.current_game) {
-          const { data: gameData } = await getUserCurrentGame(
-            event.source.userId
-          );
+      if (userData.current_game) {
+        const { data: gameData } = await getUserCurrentGame(
+          event.source.userId
+        );
 
-          // START!
-          switch (data) {
-            case "KR4TNHBEG84279-3":
-              // 問題をまた表示するとき、next stageに進むとは限らない？
-              // 違うどこかにproceednextstageがあるはず
-
-              return sendQuestion(event.replyToken, event.source.userId);
-            case "FEIUQEGFQUEIFQGF":
-              if (gameData.progress.length === 1) {
-                const next_question = flex_messages.next_question;
-                await proceedNextStage(event.source.userId);
-                next_question.body.contents[0].text = `Q1`;
-                next_question.footer.contents[0].action.displayText = `問題を表示`;
-                return client.replyMessage(event.replyToken, [
-                  {
-                    type: "text",
-                    text: "下のボタンを押すと問題が表示されます。",
-                  },
-                  {
-                    type: "flex",
-                    contents: next_question,
-                    altText: "問題を表示",
-                  },
-                ]);
-              }
-              break;
-            case "終了":
-              await endGame(event.source.userId);
-              console.log("endgame");
-              return sendFlexMessage(
-                event.replyToken,
-                game_start,
-                "ゲーム開始"
-              );
-          }
-        }
+        // START!
         switch (data) {
-          case "ゲーム開始":
-            const { data: userData } = await getUserData(event.source.userId);
+          case "KR4TNHBEG84279-3":
+            // 問題をまた表示するとき、next stageに進むとは限らない？
+            // 違うどこかにproceednextstageがあるはず
 
-            if (!userData.name) {
-              proceedToMenu(event.source.userId, 1);
-              return replyText(event.replyToken, [
-                "あなたのニックネームを送信してください。",
-                "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+            return sendQuestion(event.replyToken, event.source.userId);
+          case "FEIUQEGFQUEIFQGF":
+            if (gameData.progress.length === 1) {
+              const next_question = flex_messages.next_question;
+              await proceedNextStage(event.source.userId);
+              next_question.body.contents[0].text = `Q1`;
+              next_question.footer.contents[0].action.displayText = `問題を表示`;
+              return client.replyMessage(event.replyToken, [
+                {
+                  type: "text",
+                  text: "下のボタンを押すと問題が表示されます。",
+                },
+                {
+                  type: "flex",
+                  contents: next_question,
+                  altText: "問題を表示",
+                },
               ]);
-            } else {
-              proceedToMenu(event.source.userId, 3);
-              return sendFlexMessage(
-                event.replyToken,
-                flex_messages.place,
-                "あなたはどちらからのご参加ですか？"
-              );
             }
+            break;
+          case "終了":
+            await endGame(event.source.userId);
+            console.log("endgame");
+            return sendFlexMessage(event.replyToken, game_start, "ゲーム開始");
         }
       }
+      switch (data) {
+        case "ゲーム開始":
+          const { data: userData } = await getUserData(event.source.userId);
+
+          if (!userData.name) {
+            proceedToMenu(event.source.userId, 1);
+            return replyText(event.replyToken, [
+              "あなたのニックネームを送信してください。",
+              "（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+            ]);
+          } else {
+            proceedToMenu(event.source.userId, 3);
+            return sendFlexMessage(
+              event.replyToken,
+              flex_messages.place,
+              "あなたはどちらからのご参加ですか？"
+            );
+          }
+      }
+
       return;
     // return replyText(event.replyToken, `Got postback: ${data}`);
 
@@ -615,22 +606,6 @@ async function handleText(message, replyToken, source) {
       }
   }
 }
-
-//broadcastMessage
-const eta_ms = new Date(2022, 4, 15, 12, 30).getTime() - Date.now();
-
-console.log(Math.floor(eta_ms / 60000));
-if (eta_ms > 0)
-  setTimeout(() => {
-    const message = [
-      {
-        type: "flex",
-        contents: flex_messages.thankyou,
-        altText: "ご来場ありがとうございました。",
-      },
-    ];
-    client.broadcast(message);
-  }, eta_ms);
 
 // listen on port
 const port = process.env.PORT || 3000;
