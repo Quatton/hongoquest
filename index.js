@@ -410,211 +410,209 @@ async function handleText(message, replyToken, source) {
     console.log("admin");
     return sendFlexMessage(replyToken, game_start, "ゲーム開始");
   }
-  if (new Date(2022, 4, 15, 12, 0).getTime() - Date.now() > 0) {
-    if (!userData.current_game) {
-      // if no game then create a new game
+  if (!userData.current_game) {
+    // if no game then create a new game
 
-      // menu_stage によって
-      switch (userData.menu_stage) {
-        case 1:
-          const nickname_confirm = flex_messages.nickname;
-          const name = message.text.slice(0, 16);
-          nickname_confirm.body.contents[1].text = name;
-          proceedToMenu(source.userId);
-          updateUserData(source.userId, {
-            name: name,
-          });
-          return sendFlexMessage(
-            replyToken,
-            nickname_confirm,
-            "ニックネームは 「" + name + "」でよろしいですか？"
-          );
-        case 2:
-          switch (message.text) {
-            case "はい":
-              proceedToMenu(source.userId);
-              return sendFlexMessage(
-                replyToken,
-                flex_messages.place,
-                "あなたはどちらからのご参加ですか？"
-              );
-            case "入力し直す":
-              proceedToMenu(source.userId, 1);
-              return replyText(replyToken, [
-                "あなたのニックネームを送信してください。\n（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
-              ]);
-            default:
-              return replyText(replyToken, [
-                "【はい】か【入力し直す】をお選びください。",
-              ]);
-          }
-        case 3:
-          switch (message.text) {
-            case "キャンパス":
-              proceedToMenu(source.userId);
-              return (
-                sendFlexMessage(replyToken, flex_messages.difficulty),
-                "難易度をお選びください。"
-              );
-            case "オンライン":
-              proceedToMenu(source.userId, 0);
-              newGameData(source.userId, 2);
-              return sendFlexMessage(
-                replyToken,
-                flex_messages.start_confirm,
-                "注意点"
-              );
-            default:
-              return replyText(replyToken, [
-                "【キャンパス】か【オンライン】をお選びください。",
-              ]);
-          }
-        case 4:
-          switch (message.text) {
-            case "難しい":
-              proceedToMenu(source.userId, 0);
-              newGameData(source.userId, 0);
-              return sendFlexMessage(replyToken, flex_messages.start_confirm);
-            case "普通":
-              proceedToMenu(source.userId, 0);
-              newGameData(source.userId, 1);
-              return sendFlexMessage(replyToken, flex_messages.start_confirm);
-            default:
-              return replyText(replyToken, [
-                "【難しい】か【普通】をお選びください。",
-              ]);
-          }
-      }
-
-      // menu_stage 以外
-      switch (message.text) {
-        default:
-          if (Date.now() - new Date(2022, 4, 14, 0, 0).getTime() > 0) {
-            return replyText(replyToken, [
-              `「ゲーム開始」のボタンを押してください。`,
-            ]);
-          } else {
-            return replyText(replyToken, [
-              `問題は五月祭当日の5/14(土)午前9:00から配信されます！お楽しみに✨✨`,
-              `質問などがあれば、なるべくTwitter、Instagramにてお願いします！\nhttps://twitter.com/hongoquest\nhttps://instagram.com/hongoquest`,
-            ]);
-          }
-      }
-    }
-    // current_game がある場合　今のゲームをゲットする
-    const { data: gameData, key } = await getUserCurrentGame(source.userId);
-    const stage = gameData.progress.length - 1;
-    const mode = gameData.mode;
-
-    // mode, stageで questionDataをindexする
-    const questionData = questions[mode][stage];
-
-    // current_gameがすでに存在する場合のメッセージ対応
-    switch (message.text) {
-      case "ゲーム開始":
-        return replyText(replyToken, ["ゲームを開始しました。"]);
-      case "終了":
-        return await sendFlexMessage(
+    // menu_stage によって
+    switch (userData.menu_stage) {
+      case 1:
+        const nickname_confirm = flex_messages.nickname;
+        const name = message.text.slice(0, 16);
+        nickname_confirm.body.contents[1].text = name;
+        proceedToMenu(source.userId);
+        updateUserData(source.userId, {
+          name: name,
+        });
+        return sendFlexMessage(
           replyToken,
-          flex_messages.shuryo,
-          "終了しますか"
+          nickname_confirm,
+          "ニックネームは 「" + name + "」でよろしいですか？"
         );
-      case "ヒント":
-        const time_start = gameData.progress.at(-1);
-        const time_diff = Date.now() - time_start;
-        const hints = Array.isArray(questionData.hint)
-          ? questionData.hint
-          : [questionData.hint];
-
-        const usedHint = gameData.hint.at(-1);
-
-        if (usedHint >= hints.length) {
-          return replyText(
-            replyToken,
-            "ヒントは以上です！\nここからは自力で考えてみよう！"
-          );
+      case 2:
+        switch (message.text) {
+          case "はい":
+            proceedToMenu(source.userId);
+            return sendFlexMessage(
+              replyToken,
+              flex_messages.place,
+              "あなたはどちらからのご参加ですか？"
+            );
+          case "入力し直す":
+            proceedToMenu(source.userId, 1);
+            return replyText(replyToken, [
+              "あなたのニックネームを送信してください。\n（ここで入力したニックネームはランキングなどに掲載されます。電話番号などの個人情報や他人を不快にさせるおそれのある言葉は使用しないでください。）",
+            ]);
+          default:
+            return replyText(replyToken, [
+              "【はい】か【入力し直す】をお選びください。",
+            ]);
         }
+      case 3:
+        switch (message.text) {
+          case "キャンパス":
+            proceedToMenu(source.userId);
+            return (
+              sendFlexMessage(replyToken, flex_messages.difficulty),
+              "難易度をお選びください。"
+            );
+          case "オンライン":
+            proceedToMenu(source.userId, 0);
+            newGameData(source.userId, 2);
+            return sendFlexMessage(
+              replyToken,
+              flex_messages.start_confirm,
+              "注意点"
+            );
+          default:
+            return replyText(replyToken, [
+              "【キャンパス】か【オンライン】をお選びください。",
+            ]);
+        }
+      case 4:
+        switch (message.text) {
+          case "難しい":
+            proceedToMenu(source.userId, 0);
+            newGameData(source.userId, 0);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+          case "普通":
+            proceedToMenu(source.userId, 0);
+            newGameData(source.userId, 1);
+            return sendFlexMessage(replyToken, flex_messages.start_confirm);
+          default:
+            return replyText(replyToken, [
+              "【難しい】か【普通】をお選びください。",
+            ]);
+        }
+    }
 
-        // ある時間がたってから
-        if (time_diff < 0 * (usedHint + 1)) {
+    // menu_stage 以外
+    switch (message.text) {
+      default:
+        if (Date.now() - new Date(2022, 4, 14, 0, 0).getTime() > 0) {
           return replyText(replyToken, [
-            `Please wait another ${Math.ceil(
-              (10000 - time_diff) / 1000
-            )} seconds`,
+            `「ゲーム開始」のボタンを押してください。`,
           ]);
         } else {
-          useHint(key);
           return replyText(replyToken, [
-            hints[usedHint],
-            usedHint + 1 >= hints.length
-              ? "ヒントは以上です！\nここからは自力で考えてみよう！"
-              : "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
+            `問題は五月祭当日の5/14(土)午前9:00から配信されます！お楽しみに✨✨`,
+            `質問などがあれば、なるべくTwitter、Instagramにてお願いします！\nhttps://twitter.com/hongoquest\nhttps://instagram.com/hongoquest`,
           ]);
         }
+    }
+  }
+  // current_game がある場合　今のゲームをゲットする
+  const { data: gameData, key } = await getUserCurrentGame(source.userId);
+  const stage = gameData.progress.length - 1;
+  const mode = gameData.mode;
 
-      default:
-        if (
-          questionData.answer.includes(message.text) ||
-          (message.text === "12345678" &&
-            Date.now() - new Date(2022, 4, 14, 0, 0).getTime() < 0)
-        ) {
-          await proceedNextStage(source.userId);
-          if (stage === questions[mode].length - 1) {
-            endGame(source.userId).then((data) => {
-              const { time, wrong } = data;
-              const congrats = flex_messages.congrats;
-              // nickname をどうにか取得して
-              congrats.header.contents[0].text = userData.name + " さん";
-              congrats.body.contents[0].text = time;
-              congrats.body.contents[1].text = `間違えた数：${wrong}`;
+  // mode, stageで questionDataをindexする
+  const questionData = questions[mode][stage];
 
-              const message = [
-                { type: "text", text: "正解です！" },
-                { type: "text", text: "【豆知識】" + questionData.tips },
-                {
-                  type: "flex",
-                  altText: `全問クリアおめでとうございます。あなたのクリア時間はこちらです。`,
-                  contents: congrats,
-                },
-              ];
-              return client.replyMessage(replyToken, message);
-            });
-          } else {
-            // ここにproceednextstage入れても動かなかった（泣）
-            // await proceedNextStage(source.userId);
+  // current_gameがすでに存在する場合のメッセージ対応
+  switch (message.text) {
+    case "ゲーム開始":
+      return replyText(replyToken, ["ゲームを開始しました。"]);
+    case "終了":
+      return await sendFlexMessage(
+        replyToken,
+        flex_messages.shuryo,
+        "終了しますか"
+      );
+    case "ヒント":
+      const time_start = gameData.progress.at(-1);
+      const time_diff = Date.now() - time_start;
+      const hints = Array.isArray(questionData.hint)
+        ? questionData.hint
+        : [questionData.hint];
 
-            const next_question = flex_messages.next_question;
+      const usedHint = gameData.hint.at(-1);
 
-            next_question.body.contents[0].text = `Q${stage + 1}`;
-            next_question.footer.contents[0].action.displayText = `問題を表示`;
+      if (usedHint >= hints.length) {
+        return replyText(
+          replyToken,
+          "ヒントは以上です！\nここからは自力で考えてみよう！"
+        );
+      }
 
-            // last_stageだと、これが最後と表示すればいい？
-            // >> しておきます！
+      // ある時間がたってから
+      if (time_diff < 0 * (usedHint + 1)) {
+        return replyText(replyToken, [
+          `Please wait another ${Math.ceil(
+            (10000 - time_diff) / 1000
+          )} seconds`,
+        ]);
+      } else {
+        useHint(key);
+        return replyText(replyToken, [
+          hints[usedHint],
+          usedHint + 1 >= hints.length
+            ? "ヒントは以上です！\nここからは自力で考えてみよう！"
+            : "もう一度「ヒント」と送信すると2つ目のヒントを見ることができます。",
+        ]);
+      }
 
-            if (stage === questions[mode].length - 2) {
-              next_question.body.contents[0].text = `最終問題`;
-              next_question.body.contents[0].size = `4xl`;
-            }
+    default:
+      if (
+        questionData.answer.includes(message.text) ||
+        (message.text === "12345678" &&
+          Date.now() - new Date(2022, 4, 14, 0, 0).getTime() < 0)
+      ) {
+        await proceedNextStage(source.userId);
+        if (stage === questions[mode].length - 1) {
+          endGame(source.userId).then((data) => {
+            const { time, wrong } = data;
+            const congrats = flex_messages.congrats;
+            // nickname をどうにか取得して
+            congrats.header.contents[0].text = userData.name + " さん";
+            congrats.body.contents[0].text = time;
+            congrats.body.contents[1].text = `間違えた数：${wrong}`;
 
             const message = [
               { type: "text", text: "正解です！" },
               { type: "text", text: "【豆知識】" + questionData.tips },
               {
                 type: "flex",
-                altText: "問題を表示",
-                contents: next_question,
+                altText: `全問クリアおめでとうございます。あなたのクリア時間はこちらです。`,
+                contents: congrats,
               },
             ];
-            return await client.replyMessage(replyToken, message);
-          }
+            return client.replyMessage(replyToken, message);
+          });
         } else {
-          updateWrong(key);
-          return await replyText(replyToken, [
-            "不正解です😢\nもう一度よく考えてみましょう!",
-            "解答が合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。",
-          ]);
+          // ここにproceednextstage入れても動かなかった（泣）
+          // await proceedNextStage(source.userId);
+
+          const next_question = flex_messages.next_question;
+
+          next_question.body.contents[0].text = `Q${stage + 1}`;
+          next_question.footer.contents[0].action.displayText = `問題を表示`;
+
+          // last_stageだと、これが最後と表示すればいい？
+          // >> しておきます！
+
+          if (stage === questions[mode].length - 2) {
+            next_question.body.contents[0].text = `最終問題`;
+            next_question.body.contents[0].size = `4xl`;
+          }
+
+          const message = [
+            { type: "text", text: "正解です！" },
+            { type: "text", text: "【豆知識】" + questionData.tips },
+            {
+              type: "flex",
+              altText: "問題を表示",
+              contents: next_question,
+            },
+          ];
+          return await client.replyMessage(replyToken, message);
         }
-    }
+      } else {
+        updateWrong(key);
+        return await replyText(replyToken, [
+          "不正解です😢\nもう一度よく考えてみましょう!",
+          "解答が合っているのに不正解と表示される場合は、解答がひらがな、または数字で書かれているかを確認してみてください。",
+        ]);
+      }
   }
 }
 
